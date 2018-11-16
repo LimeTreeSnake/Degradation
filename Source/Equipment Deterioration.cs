@@ -9,11 +9,8 @@ namespace Equipment_Deterioration
     {
         static HarmonyEquipmentDeterioration()
         {
-
             HarmonyInstance harmonyInstance = HarmonyInstance.Create("rimworld.limetreesnake.equipmentdeterioration");
             harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_ApparelTracker), "ApparelTrackerTickRare"), new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("ApparelTrackerTickRare_PreFix")), null);
-
-            Log.Message("Initialized");
         }
         
         public static bool ApparelTrackerTickRare_PreFix(Pawn_ApparelTracker __instance)
@@ -25,7 +22,7 @@ namespace Equipment_Deterioration
                 
                 for (int i = 0; i < __instance.pawn.equipment.AllEquipmentListForReading.Count; i++)
                 {
-                    int num = GenMath.RoundRandom(0.25f);
+                    int num = GenMath.RoundRandom(SettingsHelper.latest.detoriationRate);
                     if (num > 0)
                     {
                         __instance.pawn.equipment.AllEquipmentListForReading[0].TakeDamage(new DamageInfo(DamageDefOf.Deterioration, (float)num));
@@ -41,4 +38,6 @@ namespace Equipment_Deterioration
             return true;
         }
     }
+
+
 }   
