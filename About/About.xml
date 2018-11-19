@@ -4,21 +4,29 @@
 	<author>LimeTreeSnake</author>
 	<targetVersion>1.0.2059</targetVersion>
 	<description> 
-1.0 (2018-11-15)
-Do you think it's odd that your clothes
-crumbles to dust whilst those berries and
-other utilities are safe from those 
-harmfull pockets?
-That your trusted gun does not break down
-whilst being carried?
+1.1 (2018-11-19)
 
-Then this mod is for you!
+Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn, whether it should have it deteriorate by one point.
+However, this is not done for weapons and other equipment. This mod rectifies that by doing the same check for them.
 
-This mod makes sure that everything your
-pawn carries gets smushed with time!
+An added bonus to that is that weapons used now deteriorates as well. 
+Whenever a gun is fired or whenever a melee weapon hits something, a check for deterioration is made.
 
-Special Thanks to: Jecrell and Pardeike
+These percentage values can be changed in the mod settings.
 
-Planned: Modifiable deterioration rate.
+-Special Thanks to-
+Jecrell: cause he is great and his code helped me a lot.
+Pardeike: cause of his work on Harmony.
+
+-Links-
+https://ludeon.com/forums/index.php?topic=46890.msg445480
+https://steamcommunity.com/sharedfiles/filedetails/?id=1565674984
+
+Updates:
+2018-11-19 - Added functionality for deterioration of weapons upon use.
+2018-11-16 - Made the deteriorate value changeable through mod settings.
+
+-License-
+You may use this code as it pleases you but for now, do notify me as I'd love to hear if people find use of this! :)
 	</description>
 </ModMetaData>
