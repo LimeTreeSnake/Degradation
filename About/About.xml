@@ -4,8 +4,6 @@
 	<author>LimeTreeSnake</author>
 	<targetVersion>1.0.2059</targetVersion>
 	<description> 
-1.1 (2018-11-19)
-
 Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn, whether it should have it deteriorate by one point.
 However, this is not done for weapons and other equipment. This mod rectifies that by doing the same check for them.
 
@@ -23,6 +21,7 @@ https://ludeon.com/forums/index.php?topic=46890.msg445480
 https://steamcommunity.com/sharedfiles/filedetails/?id=1565674984
 
 Updates:
+2018-11-25 - Critial Update, resolved issue with turrets and other non-pawn things being calculated.
 2018-11-19 - Added functionality for deterioration of weapons upon use.
 2018-11-16 - Made the deteriorate value changeable through mod settings.
 
