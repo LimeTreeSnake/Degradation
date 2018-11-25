@@ -59,6 +59,8 @@ namespace Equipment_Deterioration
 
         public static void TryCastShot_Melee_PostFix(Verb_MeleeAttack __instance, bool __result)
         {
+            if (!__instance.CasterIsPawn)
+                return;
             if (!__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null)
             {
                 if (!__result)
@@ -78,6 +80,8 @@ namespace Equipment_Deterioration
         }
         public static void TryCastShot_Ranged_PostFix(Verb_Shoot __instance)
         {
+            if (!__instance.CasterIsPawn)
+                return;
             if (!__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null)
             {
                 int num = GenMath.RoundRandom(SettingsHelper.latest.detoriationRangedUsedRate);
