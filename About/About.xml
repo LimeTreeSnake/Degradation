@@ -31,11 +31,14 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=1565674984
 
 Updates:
 2019-08-08 
-	-Added more deterioation options, 
+	-Added more deterioration options, 
 	-option for quality affecting deterioation, 
 	-bugfix: weapons detoriating upon use no longer cause a null exception. 
 	-New mod settings interface.
-	-XND Proper Shotgun support
+Hotfix
+	-Removed [XND]Proper Shotguns support as I have to learn more harmony. 
+	-Fixed the percentage calculations that I had overlooked causing every shot to be deteriorating.
+	-Items with 0 hp or less henceforth are indestructible. (Things like steel)
 2018-11-25
 	-resolved issue with turrets and other non-pawn things being calculated.
 2018-11-19
