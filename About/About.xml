@@ -32,6 +32,7 @@ Updates:
 	-option for quality affecting deterioation, 
 	-bugfix: weapons detoriating upon use no longer cause a null exception. 
 	-New mod settings interface.
+	-XND Proper Shotgun support
 2018-11-25
 	-resolved issue with turrets and other non-pawn things being calculated.
 2018-11-19
