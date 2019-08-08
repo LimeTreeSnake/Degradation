@@ -2,30 +2,44 @@
 <ModMetaData>
 	<name>Equipment Deterioration</name>
 	<author>LimeTreeSnake</author>
-	<targetVersion>1.0.2059</targetVersion>
+	<targetVersion>1.0</targetVersion>
 	<description> 
-Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn, whether it should have it deteriorate by one point.
-However, this is not done for weapons and other equipment. This mod rectifies that by doing the same check for them.
+Do you want things to deteriorate with time and use?
+Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn, whether it should have it deteriorate by one point or not.
+However, this is not done for weapons and other carried items. This mod rectifies this amongst adding other features.
 
-An added bonus to that is that weapons used now deteriorates as well. 
-Whenever a gun is fired or whenever a melee weapon hits something, a check for deterioration is made.
-
-These percentage values can be changed in the mod settings.
+Features:
+-Option to remove vanilla deterioation thus with this mod it's possible to remove all deterioation.
+-Possibility to change chance of daily deterioation for equipment, apparell and items in inventory.
+-Possibility to increase deterioation damage for equipment, apparell and items in inventory.
+-Randomize damage done to equipment, apparell and items in inventory
+-Chance of deterioation damage whenever firing a gun.
+-Chance of deterioation damage whenever bashing with weapons.
 
 -Special Thanks to-
 Jecrell: cause he is great and his code helped me a lot.
 Pardeike: cause of his work on Harmony.
+XeoNovaDan: For his suggestion regarding quality.
+LegendBraki: For his suggestion of disabling the vanilla deterioration.
 
 -Links-
 https://ludeon.com/forums/index.php?topic=46890.msg445480
 https://steamcommunity.com/sharedfiles/filedetails/?id=1565674984
 
 Updates:
-2018-11-25 - Critial Update, resolved issue with turrets and other non-pawn things being calculated.
-2018-11-19 - Added functionality for deterioration of weapons upon use.
-2018-11-16 - Made the deteriorate value changeable through mod settings.
+2019-08-08 
+	-Added more deterioation options, 
+	-option for quality affecting deterioation, 
+	-bugfix: weapons detoriating upon use no longer cause an null exception. 
+	-New mod settings interface.
+2018-11-25
+	-resolved issue with turrets and other non-pawn things being calculated.
+2018-11-19
+	-Added functionality for deterioration of weapons upon use.
+2018-11-16
+	-Made the deteriorate value changeable through mod settings.
 
 -License-
-You may use this code as it pleases you but for now, do notify me as I'd love to hear if people find use of this! :)
+You may use this code as however you want. However, do notify me as I'd love to hear if people find use of my code! :)
 	</description>
 </ModMetaData>

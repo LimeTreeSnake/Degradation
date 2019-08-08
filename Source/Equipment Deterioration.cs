@@ -2,100 +2,133 @@
 using RimWorld;
 using Verse;
 
-namespace Equipment_Deterioration
-{
+namespace Equipment_Deterioration {
     [StaticConstructorOnStartup]
-    internal static class HarmonyEquipmentDeterioration
-    {
-        static HarmonyEquipmentDeterioration()
-        {
+    internal static class HarmonyEquipmentDeterioration {
+        static HarmonyEquipmentDeterioration() {
             HarmonyInstance harmonyInstance = HarmonyInstance.Create("rimworld.limetreesnake.equipmentdeterioration");
             harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_ApparelTracker), "ApparelTrackerTickRare"), new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("ApparelTrackerTickRare_PreFix")), null);
             harmonyInstance.Patch(AccessTools.Method(typeof(Verb_Shoot), "TryCastShot"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("TryCastShot_Ranged_PostFix")), null);
             harmonyInstance.Patch(AccessTools.Method(typeof(Verb_MeleeAttack), "TryCastShot"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("TryCastShot_Melee_PostFix")), null);
-
-
         }
 
-        public static bool ApparelTrackerTickRare_PreFix(Pawn_ApparelTracker __instance)
-        {
-            int wearoutTick = Traverse.Create(__instance).Field("lastApparelWearoutTick").GetValue<int>();
+        public static bool ApparelTrackerTickRare_PreFix(Pawn_ApparelTracker __instance) {
             int ticksGame = Find.TickManager.TicksGame;
-            if (ticksGame - wearoutTick >= 60000)
-            {
+            int wearoutTick = Traverse.Create(__instance).Field("lastApparelWearoutTick").GetValue<int>();
 
-                for (int i = 0; i < __instance.pawn.equipment.AllEquipmentListForReading.Count; i++)
-                {
-                    int num = GenMath.RoundRandom(SettingsHelper.latest.detoriationDailyRate);
-                    if (num > 0)
-                    {
-                        __instance.pawn.equipment.AllEquipmentListForReading[0].TakeDamage(new DamageInfo(DamageDefOf.Deterioration, (float)num));
+            if (wearoutTick < 0)
+                if (SettingsHelper.LatestVersion.removeVanillaSettings)
+                    Traverse.Create(__instance).Field("lastApparelWearoutTick").SetValue(ticksGame);
+
+            if (ticksGame - wearoutTick >= 60000) {
+                //Apparell
+                if (SettingsHelper.LatestVersion.detoriationApparellRate != 0) {
+                    for (int i = 0; i < __instance.pawn.apparel.WornApparel.Count; i++) {
+                        if (DeteriorateCheck(__instance.pawn.apparel.WornApparel[i], SettingsHelper.LatestVersion.detoriationApparellRate) > 0) {
+                            Deteriorate(__instance.pawn.apparel.WornApparel[i], __instance.pawn, SettingsHelper.LatestVersion.damageIncreaseApparell, SettingsHelper.LatestVersion.damageIncreaseRandomApparell);
+                        }
                     }
-                    if (__instance.pawn.equipment.AllEquipmentListForReading[0].Destroyed && PawnUtility.ShouldSendNotificationAbout(__instance.pawn) && !__instance.pawn.Dead)
-                    {
-                        string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(__instance.pawn.equipment.AllEquipmentListForReading[0].def, __instance.pawn.equipment.AllEquipmentListForReading[0].Stuff), __instance.pawn);
-                        str = str.CapitalizeFirst();
-                        Messages.Message(str, __instance.pawn, MessageTypeDefOf.NegativeEvent);
+                }
+                //Equipment
+                if (SettingsHelper.LatestVersion.detoriationEquipmentRate != 0) {
+                    for (int i = 0; i < __instance.pawn.equipment.AllEquipmentListForReading.Count; i++) {
+                        if (DeteriorateCheck(__instance.pawn.equipment.AllEquipmentListForReading[i], SettingsHelper.LatestVersion.detoriationEquipmentRate) > 0) {
+                            Deteriorate(__instance.pawn.equipment.AllEquipmentListForReading[i], __instance.pawn, SettingsHelper.LatestVersion.damageIncreaseEquipment, SettingsHelper.LatestVersion.damageIncreaseRandomEquipment);
+                        }
                     }
+                }
+                //Items
+                if (SettingsHelper.LatestVersion.detoriationInventoryRate != 0) {
+                    for (int i = 0; i < __instance.pawn.inventory.innerContainer.Count; i++) {
+                        if (DeteriorateCheck(__instance.pawn.inventory.innerContainer[i], SettingsHelper.LatestVersion.detoriationInventoryRate) > 0) {
+                            Deteriorate(__instance.pawn.inventory.innerContainer[i], __instance.pawn, SettingsHelper.LatestVersion.damageIncreaseItem, SettingsHelper.LatestVersion.damageIncreaseRandomItem);
+                        }
+                    }
+                }
+                //If the vanilla deterioration is off, make sure the lastApparelWearoutTick is updated.
+                if (SettingsHelper.LatestVersion.removeVanillaSettings) {
+                    Traverse.Create(__instance).Field("lastApparelWearoutTick").SetValue(ticksGame);
                 }
             }
-            return true;
+            return !SettingsHelper.LatestVersion.removeVanillaSettings;
         }
 
-        //public static void WarmupComplete_PostFix(Verb __instance)
-        //{
-        //    int num = GenMath.RoundRandom(SettingsHelper.latest.detoriationUsedRate);
-        //    if (num > 0)
-        //    {
-        //        __instance.CasterPawn.equipment.AllEquipmentListForReading[0].TakeDamage(new DamageInfo(DamageDefOf.Deterioration, (float)num));
-        //    }
-        //    if (__instance.CasterPawn.equipment.AllEquipmentListForReading[0].Destroyed && PawnUtility.ShouldSendNotificationAbout(__instance.CasterPawn) && !__instance.CasterPawn.Dead)
-        //    {
-        //        string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(__instance.CasterPawn.equipment.AllEquipmentListForReading[0].def, __instance.CasterPawn.equipment.AllEquipmentListForReading[0].Stuff), __instance.CasterPawn);
-        //        str = str.CapitalizeFirst();
-        //        Messages.Message(str, __instance.CasterPawn, MessageTypeDefOf.NegativeEvent);
-        //    }
-        //}
-
-        public static void TryCastShot_Melee_PostFix(Verb_MeleeAttack __instance, bool __result)
-        {
-            if (!__instance.CasterIsPawn)
+        public static void TryCastShot_Melee_PostFix(Verb_MeleeAttack __instance, bool __result) {
+            if (!__instance.CasterIsPawn) {
                 return;
-            if (!__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null)
-            {
-                if (!__result)
-                    return;
-                int num = GenMath.RoundRandom(SettingsHelper.latest.detoriationMeleeUsedRate);
-                if (num > 0)
-                {
-                    __instance.CasterPawn.equipment.Primary.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, (float)num));
-                }
-                if (__instance.CasterPawn.equipment.Primary.Destroyed && PawnUtility.ShouldSendNotificationAbout(__instance.CasterPawn) && !__instance.CasterPawn.Dead)
-                {
-                    string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(__instance.CasterPawn.equipment.Primary.def, __instance.CasterPawn.equipment.Primary.Stuff), __instance.CasterPawn);
-                    str = str.CapitalizeFirst();
-                    Messages.Message(str, __instance.CasterPawn, MessageTypeDefOf.NegativeEvent);
+            }
+            if (!__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null) {
+                if (DeteriorateCheck(__instance.CasterPawn.equipment.Primary, SettingsHelper.LatestVersion.detoriationMeleeUsedRate) > 0) {
+                    Deteriorate(__instance.CasterPawn.equipment.Primary, __instance.CasterPawn, SettingsHelper.LatestVersion.damageIncreaseMeleeWeapon, SettingsHelper.LatestVersion.damageIncreaseRandomMeleeWeapon);
                 }
             }
         }
-        public static void TryCastShot_Ranged_PostFix(Verb_Shoot __instance)
-        {
-            if (!__instance.CasterIsPawn)
+        public static void TryCastShot_Ranged_PostFix(Verb_Shoot __instance) {
+            if (!__instance.CasterIsPawn) {
                 return;
-            if (!__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null)
-            {
-                int num = GenMath.RoundRandom(SettingsHelper.latest.detoriationRangedUsedRate);
-                if (num > 0)
-                {
-                    __instance.CasterPawn.equipment.Primary.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, (float)num));
-                }
-                if (__instance.CasterPawn.equipment.Primary.Destroyed && PawnUtility.ShouldSendNotificationAbout(__instance.CasterPawn) && !__instance.CasterPawn.Dead)
-                {
-                    string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(__instance.CasterPawn.equipment.Primary.def, __instance.CasterPawn.equipment.Primary.Stuff), __instance.CasterPawn);
-                    str = str.CapitalizeFirst();
-                    Messages.Message(str, __instance.CasterPawn, MessageTypeDefOf.NegativeEvent);
+            }
+            if (!__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null) {
+                if (DeteriorateCheck(__instance.CasterPawn.equipment.Primary, SettingsHelper.LatestVersion.detoriationRangedUsedRate) > 0) {
+                    Deteriorate(__instance.CasterPawn.equipment.Primary, __instance.CasterPawn, SettingsHelper.LatestVersion.damageIncreaseRangedWeapon, SettingsHelper.LatestVersion.damageIncreaseRandomRangedWeapon);
                 }
             }
+        }
+
+        public static float QualityCheck(Thing item, float input) {
+            if (item.TryGetQuality(out QualityCategory quality)) {
+                switch (quality) {
+                    case QualityCategory.Awful: {
+                            // Log.Message(SettingsHelper.LatestVersion.awful.ToString()+ "*" + input + "=" + input * SettingsHelper.LatestVersion.awful);
+                            return input * SettingsHelper.LatestVersion.awful;
+                        }
+                    case QualityCategory.Poor: {
+                            // Log.Message(SettingsHelper.LatestVersion.poor.ToString() + "*" + input + "=" + input * SettingsHelper.LatestVersion.poor);
+                            return input * SettingsHelper.LatestVersion.poor;
+                        }
+                    case QualityCategory.Normal: {
+                            // Log.Message(SettingsHelper.LatestVersion.normal.ToString() + "*" + input + "=" + input * SettingsHelper.LatestVersion.normal);
+                            return input * SettingsHelper.LatestVersion.normal;
+                        }
+                    case QualityCategory.Good: {
+                            // Log.Message(SettingsHelper.LatestVersion.good.ToString() + "*" + input + "=" + input * SettingsHelper.LatestVersion.good);
+                            return input * SettingsHelper.LatestVersion.good;
+                        }
+                    case QualityCategory.Excellent: {
+                            // Log.Message(SettingsHelper.LatestVersion.excellent.ToString() + "*" + input + "=" + input * SettingsHelper.LatestVersion.excellent);
+                            return input * SettingsHelper.LatestVersion.excellent;
+                        }
+                    case QualityCategory.Masterwork: {
+                            // Log.Message(SettingsHelper.LatestVersion.masterwork.ToString() + "*" + input + "=" + input * SettingsHelper.LatestVersion.masterwork);
+                            return input * SettingsHelper.LatestVersion.masterwork;
+                        }
+                    case QualityCategory.Legendary: {
+                            // Log.Message(SettingsHelper.LatestVersion.legendary.ToString() + "*" + input + "=" + input * SettingsHelper.LatestVersion.legendary);
+                            return input * SettingsHelper.LatestVersion.legendary;
+                        }
+                }
+            }
+            return input;
+        }
+
+        public static void Deteriorate(Thing item, Pawn pawn, float damageIncrement, bool random) {
+
+            float damage = random || damageIncrement != 1
+                ? Rand.Range(1, damageIncrement)
+                : damageIncrement;
+            //Log.Message("Damage: " + damage);
+            if (damage > item.HitPoints && PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
+                string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(item.def, item.Stuff), pawn);
+                str = str.CapitalizeFirst();
+                Messages.Message(str, pawn, MessageTypeDefOf.NegativeEvent);
+            }
+            item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
+        }
+
+        public static int DeteriorateCheck(Thing item, float chance) {
+            //Log.Message("Deterioration check for: " + item + " Chance to deteriorate: " + chance);
+            return SettingsHelper.LatestVersion.qualityMatters ?
+                           GenMath.RoundRandom(QualityCheck(item, chance))
+                           : GenMath.RoundRandom(chance);
         }
     }
 
