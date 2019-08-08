@@ -30,7 +30,7 @@ Updates:
 2019-08-08 
 	-Added more deterioation options, 
 	-option for quality affecting deterioation, 
-	-bugfix: weapons detoriating upon use no longer cause an null exception. 
+	-bugfix: weapons detoriating upon use no longer cause a null exception. 
 	-New mod settings interface.
 2018-11-25
 	-resolved issue with turrets and other non-pawn things being calculated.
