@@ -127,7 +127,7 @@ namespace Equipment_Deterioration {
             float damage = random || damageIncrement != 1
                 ? Rand.Range(1, damageIncrement)
                 : damageIncrement;
-            //Log.Message("Damage: " + damage);
+            Log.Message("Damage: " + damage);
             if (damage > item.HitPoints && PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
                 string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(item.def, item.Stuff), pawn);
                 str = str.CapitalizeFirst();
@@ -136,12 +136,16 @@ namespace Equipment_Deterioration {
             item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
         }
         public static int DeteriorateCheck(Thing item, float chance) {
-            if (item.MaxHitPoints == 0)
+            //Log.Message("Max Hitpoints: " + item.MaxHitPoints + " Hitpoints: " + item.HitPoints);
+            if (item.MaxHitPoints <= 1 || item.HitPoints <= 0) {
                 return 0;
-            //Log.Message("Deterioration check for: " + item + " Chance to deteriorate: " + chance);
-            return SettingsHelper.LatestVersion.qualityMatters ?
-                           GenMath.RoundRandom(QualityCheck(item, chance))
-                           : GenMath.RoundRandom(chance);
+            }
+            else {
+                //Log.Message("Deterioration check for: " + item + " Chance to deteriorate: " + chance);
+                return SettingsHelper.LatestVersion.qualityMatters ?
+                               GenMath.RoundRandom(QualityCheck(item, chance))
+                               : GenMath.RoundRandom(chance);
+            }
         }
     }
 
