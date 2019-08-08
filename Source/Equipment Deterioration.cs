@@ -136,6 +136,8 @@ namespace Equipment_Deterioration {
             item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
         }
         public static int DeteriorateCheck(Thing item, float chance) {
+            if (item.MaxHitPoints == 0)
+                return 0;
             //Log.Message("Deterioration check for: " + item + " Chance to deteriorate: " + chance);
             return SettingsHelper.LatestVersion.qualityMatters ?
                            GenMath.RoundRandom(QualityCheck(item, chance))
