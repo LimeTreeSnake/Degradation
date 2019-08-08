@@ -2,7 +2,10 @@
 <ModMetaData>
 	<name>Equipment Deterioration</name>
 	<author>LimeTreeSnake</author>
-	<targetVersion>1.0</targetVersion>
+	<supportedVersions>
+	<li>1.0</li>
+	</supportedVersions>
+	
 	<description> 
 Do you want things to deteriorate with time and use?
 Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn, whether it should have it deteriorate by one point or not.

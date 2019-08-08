@@ -5,44 +5,6 @@ namespace Equipment_Deterioration {
     internal class DeteriorationSettings : ModSettings {
 
         #region Fields
-        public float detoriationApparellRate = base_detoriationApparellRate;
-        public float detoriationEquipmentRate = base_detoriationEquipmentRate;
-        public float detoriationInventoryRate = base_detoriationInventoryRate;
-        public float detoriationRangedUsedRate = base_detoriationRangedUsedRate;
-        public float detoriationMeleeUsedRate = base_detoriationMeleeUsedRate;
-
-        public bool removeVanillaSettings = base_removeVanillaSettings;
-
-        public float damageIncreaseApparell = base_damageIncreaseApparell;
-        public bool damageIncreaseRandomApparell = base_damageIncreaseRandomApparell;
-
-        public float damageIncreaseEquipment = base_damageIncreaseEquipment;
-        public bool damageIncreaseRandomEquipment = base_damageIncreaseRandomEquipment;
-
-        public float damageIncreaseItem = base_damageIncreaseItem;
-        public bool damageIncreaseRandomItem = base_damageIncreaseRandomItem;
-
-        public float damageIncreaseRangedWeapon = base_damageIncreaseRangedWeapon;
-        public bool damageIncreaseRandomRangedWeapon = base_damageIncreaseRandomRangedWeapon;
-
-        public float damageIncreaseMeleeWeapon = base_damageIncreaseMeleeWeapon;
-        public bool damageIncreaseRandomMeleeWeapon = base_damageIncreaseRandomMeleeWeapon;
-
-
-
-        public bool qualityMatters = base_qualityMatters;
-
-        public float awful = base_awful;
-        public float poor = base_poor;
-        public float normal = base_normal;
-        public float good = base_good;
-        public float excellent = base_excellent;
-        public float masterwork = base_masterwork;
-        public float legendary = base_legendary;
-
-        #endregion Fields
-
-        #region Properties
         private static readonly bool base_removeVanillaSettings = true;
 
         private static readonly float base_detoriationApparellRate = 25f;
@@ -76,6 +38,41 @@ namespace Equipment_Deterioration {
         private static readonly float base_excellent = 0.7f;
         private static readonly float base_masterwork = 0.5f;
         private static readonly float base_legendary = 0.3f;
+        #endregion Fields
+
+        #region Properties
+        public float detoriationApparellRate = base_detoriationApparellRate;
+        public float detoriationEquipmentRate = base_detoriationEquipmentRate;
+        public float detoriationInventoryRate = base_detoriationInventoryRate;
+        public float detoriationRangedUsedRate = base_detoriationRangedUsedRate;
+        public float detoriationMeleeUsedRate = base_detoriationMeleeUsedRate;
+
+        public bool removeVanillaSettings = base_removeVanillaSettings;
+
+        public float damageIncreaseApparell = base_damageIncreaseApparell;
+        public bool damageIncreaseRandomApparell = base_damageIncreaseRandomApparell;
+
+        public float damageIncreaseEquipment = base_damageIncreaseEquipment;
+        public bool damageIncreaseRandomEquipment = base_damageIncreaseRandomEquipment;
+
+        public float damageIncreaseItem = base_damageIncreaseItem;
+        public bool damageIncreaseRandomItem = base_damageIncreaseRandomItem;
+
+        public float damageIncreaseRangedWeapon = base_damageIncreaseRangedWeapon;
+        public bool damageIncreaseRandomRangedWeapon = base_damageIncreaseRandomRangedWeapon;
+
+        public float damageIncreaseMeleeWeapon = base_damageIncreaseMeleeWeapon;
+        public bool damageIncreaseRandomMeleeWeapon = base_damageIncreaseRandomMeleeWeapon;
+        
+        public bool qualityMatters = base_qualityMatters;
+
+        public float awful = base_awful;
+        public float poor = base_poor;
+        public float normal = base_normal;
+        public float good = base_good;
+        public float excellent = base_excellent;
+        public float masterwork = base_masterwork;
+        public float legendary = base_legendary;
         #endregion Properties
 
         public override void ExposeData() {
