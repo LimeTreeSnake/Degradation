@@ -10,6 +10,7 @@ namespace Equipment_Deterioration {
             harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_ApparelTracker), "ApparelTrackerTickRare"), new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("ApparelTrackerTickRare_PreFix")), null);
             harmonyInstance.Patch(AccessTools.Method(typeof(Verb_Shoot), "TryCastShot"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("TryCastShot_Ranged_PostFix")), null);
             harmonyInstance.Patch(AccessTools.Method(typeof(Verb_MeleeAttack), "TryCastShot"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("TryCastShot_Melee_PostFix")), null);
+            harmonyInstance.Patch(AccessTools.Method(typeof(ProperShotguns.Verb_ShootShotgun), "TryCastShot"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("TryCastShot_Ranged_PostFix")), null);
         }
 
         public static bool ApparelTrackerTickRare_PreFix(Pawn_ApparelTracker __instance) {
