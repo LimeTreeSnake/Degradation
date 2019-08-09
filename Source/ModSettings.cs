@@ -29,6 +29,10 @@ namespace Equipment_Deterioration {
         private static readonly bool base_damageIncreaseRandomMeleeWeapon = false;
 
 
+        private static readonly bool base_npcDeteriorate = false;
+        private static readonly bool base_bulletMatters = false;
+        private static readonly float base_bulletMattersDamage = 3;
+
         private static readonly bool base_qualityMatters = false;
 
         private static readonly float base_awful = 3f;
@@ -63,8 +67,15 @@ namespace Equipment_Deterioration {
 
         public float damageIncreaseMeleeWeapon = base_damageIncreaseMeleeWeapon;
         public bool damageIncreaseRandomMeleeWeapon = base_damageIncreaseRandomMeleeWeapon;
-        
+
+
+
+        public bool bulletMatters = base_bulletMatters;
+        public float bulletMattersDamage = base_bulletMattersDamage;
+
         public bool qualityMatters = base_qualityMatters;
+        public bool npcDeteriorate = base_npcDeteriorate;
+
 
         public float awful = base_awful;
         public float poor = base_poor;
@@ -100,6 +111,10 @@ namespace Equipment_Deterioration {
             Scribe_Values.Look(ref damageIncreaseMeleeWeapon, "DamageIncreaseMeleeWeapon", base_damageIncreaseMeleeWeapon);
             Scribe_Values.Look(ref damageIncreaseRandomMeleeWeapon, "DamageIncreaseRandomMeleeWeapon", base_damageIncreaseRandomMeleeWeapon);
 
+            Scribe_Values.Look(ref bulletMatters, "BulletMatters", base_bulletMatters);
+            Scribe_Values.Look(ref bulletMattersDamage, "BulletMattersDamage", base_bulletMattersDamage);
+
+            Scribe_Values.Look(ref npcDeteriorate, "NPCDeteriorate", base_npcDeteriorate);
             Scribe_Values.Look(ref qualityMatters, "QualityMatters", base_qualityMatters);
             Scribe_Values.Look(ref awful, "Awful", base_awful);
             Scribe_Values.Look(ref poor, "Poor", base_poor);
@@ -139,81 +154,81 @@ namespace Equipment_Deterioration {
             list.Begin(rect2);
 
             list.CheckboxLabeled("Remove vanilla deterioration", ref deteriorationSettings.removeVanillaSettings, "Apparrel on pawns in vanilla Rimworld have a 40% chance of losing 1 durability each day. Check this box if you want this feature removed. If you decide to have this option off, then there is a chance to have multiple deteriorations per day.");
-            list.Gap();
-
-            list.CheckboxLabeled("Quality Matters", ref deteriorationSettings.qualityMatters, string.Format("This mode ensures that your items will have their chance at taking damage depend on the quality of said item."));
+            list.CheckboxLabeled("NPC stuff deteriorates too", ref deteriorationSettings.npcDeteriorate, string.Format("With this option on, NPC's equipment will deteriorate as well."));
+            list.CheckboxLabeled("Bullet Matters", ref deteriorationSettings.bulletMatters, string.Format("This mode increases the deterioration chance for weapons that fire multiple bullets."));
+            if (deteriorationSettings.bulletMatters) {
+                list.Label(string.Format("{0} Percentual multiplier deterioration chance per bullet. (Hover for example)", deteriorationSettings.bulletMattersDamage), -1, string.Format("" +
+                    "Example: You have a minigun that fires 24 rounds. " +
+                    "\nEach round increases the chance for damage by {0}%. " +
+                    "\nThe base detoriate chance for weapons fired is {1}%." + ". " +
+                    "\nwhich means a " + deteriorationSettings.bulletMattersDamage * 24 + "% increased chance for damage." +
+                    "\nGrand total of " + deteriorationSettings.detoriationRangedUsedRate * (1 + (SettingsHelper.LatestVersion.bulletMattersDamage * 24) / 100) + "%.", deteriorationSettings.bulletMattersDamage, deteriorationSettings.detoriationRangedUsedRate) + " chance for damage." +
+                    "\n\nNotice: Values over 100% does not increase damage.");
+                deteriorationSettings.bulletMattersDamage = Mathf.Round(list.Slider(deteriorationSettings.bulletMattersDamage, 1f, 100f) * 100f) / 100f;
+                list.Gap();
+            }
+            list.CheckboxLabeled("Quality Matters", ref deteriorationSettings.qualityMatters, string.Format("This mode ensures that your items will have their chance at taking damage depend on the quality of said item if applicable."));
             if (deteriorationSettings.qualityMatters) {
-                list.Label(string.Format("These values can be changed to either increase or decrease damage done to that have quality."));
                 list.Label(string.Format("A lower value means less chance for items taking deterioration damage."));
-                list.Label(string.Format("{0} awful", deteriorationSettings.awful));
+                list.Label(string.Format("{0} Awful", deteriorationSettings.awful));
                 deteriorationSettings.awful = Mathf.Round(list.Slider(deteriorationSettings.awful, 0f, 100f) * 100f) / 100f;
-                list.Label(string.Format("{0} poor", deteriorationSettings.poor));
+                list.Label(string.Format("{0} Poor", deteriorationSettings.poor));
                 deteriorationSettings.poor = Mathf.Round(list.Slider(deteriorationSettings.poor, 0f, 100f) * 100f) / 100f;
-                list.Label(string.Format("{0} normal", deteriorationSettings.normal));
+                list.Label(string.Format("{0} Normal", deteriorationSettings.normal));
                 deteriorationSettings.normal = Mathf.Round(list.Slider(deteriorationSettings.normal, 0f, 100f) * 100f) / 100f;
-                list.Label(string.Format("{0} good", deteriorationSettings.good));
+                list.Label(string.Format("{0} Good", deteriorationSettings.good));
                 deteriorationSettings.good = Mathf.Round(list.Slider(deteriorationSettings.good, 0f, 100f) * 100f) / 100f;
-                list.Label(string.Format("{0} excellent", deteriorationSettings.excellent));
+                list.Label(string.Format("{0} Excellent", deteriorationSettings.excellent));
                 deteriorationSettings.excellent = Mathf.Round(list.Slider(deteriorationSettings.excellent, 0f, 100f) * 100f) / 100f;
-                list.Label(string.Format("{0} masterwork", deteriorationSettings.masterwork));
+                list.Label(string.Format("{0} Masterwork", deteriorationSettings.masterwork));
                 deteriorationSettings.masterwork = Mathf.Round(list.Slider(deteriorationSettings.masterwork, 0f, 100f) * 100f) / 100f;
-                list.Label(string.Format("{0} legendary", deteriorationSettings.legendary));
+                list.Label(string.Format("{0} Legendary", deteriorationSettings.legendary));
                 deteriorationSettings.legendary = Mathf.Round(list.Slider(deteriorationSettings.legendary, 0f, 100f) * 100f) / 100f;
                 list.Gap();
             }
             list.GapLine();
             list.Gap();
-            list.Label(string.Format("{0}% chance per day for apparell worn to take deterioration damage", deteriorationSettings.detoriationApparellRate), 20,
+            list.Label(string.Format("{0}% Chance per day for apparell worn to take deterioration damage", deteriorationSettings.detoriationApparellRate), 20,
                  "Determines the chance of which apparell worn by pawns deteriorate.");
             deteriorationSettings.detoriationApparellRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationApparellRate, 0f, 100f) * 100f) / 100f;
-            list.Label(string.Format("{0}% chance per day for equipment worn to take deterioration damage", deteriorationSettings.detoriationEquipmentRate), 20,
+            list.Label(string.Format("{0}% Chance per day for equipment worn to take deterioration damage", deteriorationSettings.detoriationEquipmentRate), 20,
                 "Determines the chance of which items equipped by pawns deteriorate.");
             deteriorationSettings.detoriationEquipmentRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationEquipmentRate, 0f, 100f) * 100f) / 100f;
-            list.Label(string.Format("{0}% chance per day for items carried to take deterioration damage", deteriorationSettings.detoriationInventoryRate), 20,
+            list.Label(string.Format("{0}% Chance per day for items carried to take deterioration damage", deteriorationSettings.detoriationInventoryRate), 20,
                 "Determines the chance of which items carried in inventory deteriorate.");
             deteriorationSettings.detoriationInventoryRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationInventoryRate, 0f, 100f) * 100f) / 100f; ;
-            list.Label(string.Format("{0}% chance for Ranged weapons firing upon something to take deterioration damage", deteriorationSettings.detoriationRangedUsedRate), 20,
+            list.Label(string.Format("{0}% Chance for Ranged weapons firing upon something to take deterioration damage", deteriorationSettings.detoriationRangedUsedRate), 20,
                 "Determines the chance of which Ranged weapons used deteriorate.");
             deteriorationSettings.detoriationRangedUsedRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationRangedUsedRate, 0f, 100f) * 100f) / 100f;
-            list.Label(string.Format("{0}% chance for Melee weapons used to smash to take deterioration damage", deteriorationSettings.detoriationMeleeUsedRate), 20,
+            list.Label(string.Format("{0}% Chance for Melee weapons used to smash to take deterioration damage", deteriorationSettings.detoriationMeleeUsedRate), 20,
                 "Determines the chance of which Melee weapons used deteriorate");
             deteriorationSettings.detoriationMeleeUsedRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationMeleeUsedRate, 0f, 100f) * 100f) / 100f;
-            list.Gap();
             list.GapLine();
-            list.Gap();
-            list.Label(string.Format("apparell worn deterioration damage - ({0})", deteriorationSettings.damageIncreaseApparell));
-            deteriorationSettings.damageIncreaseApparell = (int)list.Slider(deteriorationSettings.damageIncreaseApparell, 1f, 10f);
-            list.CheckboxLabeled("Randomize damage done to equipment", ref deteriorationSettings.damageIncreaseRandomApparell,
-                string.Format("With this setting on, the damage done to equipment worn will be randomized from 1 to {0}.", deteriorationSettings.damageIncreaseApparell));
 
             list.Gap();
-            list.GapLine();
-            list.Label(string.Format("equipment worn deterioration damage - ({0})", deteriorationSettings.damageIncreaseEquipment));
+            list.Label(string.Format("({0}) Apparell worn deterioration damage", deteriorationSettings.damageIncreaseApparell));
+            deteriorationSettings.damageIncreaseApparell = (int)list.Slider(deteriorationSettings.damageIncreaseApparell, 1f, 10f);
+            list.Label(string.Format("({0}) Equipment worn deterioration damage", deteriorationSettings.damageIncreaseEquipment));
             deteriorationSettings.damageIncreaseEquipment = (int)list.Slider(deteriorationSettings.damageIncreaseEquipment, 1f, 10f);
+            list.Label(string.Format("({0}) Items carried deterioration damage", deteriorationSettings.damageIncreaseItem));
+            deteriorationSettings.damageIncreaseItem = (int)list.Slider(deteriorationSettings.damageIncreaseItem, 1f, 10f);
+            list.Label(string.Format("({0}) Ranged weapons deterioration damage", deteriorationSettings.damageIncreaseRangedWeapon));
+            deteriorationSettings.damageIncreaseRangedWeapon = (int)list.Slider(deteriorationSettings.damageIncreaseRangedWeapon, 1f, 10f);
+            list.Label(string.Format("({0}) Melee weapons deterioration damage", deteriorationSettings.damageIncreaseMeleeWeapon));
+            deteriorationSettings.damageIncreaseMeleeWeapon = (int)list.Slider(deteriorationSettings.damageIncreaseMeleeWeapon, 1f, 10f);
+            list.GapLine();
+
+            list.Gap();
+            list.CheckboxLabeled("Randomize damage done to apparell", ref deteriorationSettings.damageIncreaseRandomApparell,
+                string.Format("With this setting on, the damage done to apparell worn will be randomized from 1 to {0}.", deteriorationSettings.damageIncreaseApparell));
             list.CheckboxLabeled("Randomize damage done to equipment", ref deteriorationSettings.damageIncreaseRandomEquipment,
                 string.Format("With this setting on, the damage done to equipment worn will be randomized from 1 to {0}.", deteriorationSettings.damageIncreaseEquipment));
-
-            list.Gap();
-            list.GapLine();
-            list.Label(string.Format("Items carried deterioration damage - ({0})", deteriorationSettings.damageIncreaseItem));
-            deteriorationSettings.damageIncreaseItem = (int)list.Slider(deteriorationSettings.damageIncreaseItem, 1f, 10f);
             list.CheckboxLabeled("Randomize damage done to items", ref deteriorationSettings.damageIncreaseRandomItem,
                 string.Format("With this setting on, the damage done to items carried will be randomized from 1 to {0}.", deteriorationSettings.damageIncreaseItem));
-
-            list.Gap();
-            list.GapLine();
-            list.Label(string.Format("Ranged weapons deterioration damage - ({0})", deteriorationSettings.damageIncreaseRangedWeapon));
-            deteriorationSettings.damageIncreaseRangedWeapon = (int)list.Slider(deteriorationSettings.damageIncreaseRangedWeapon, 1f, 10f);
             list.CheckboxLabeled("Randomize damage done to ranged weapons", ref deteriorationSettings.damageIncreaseRandomRangedWeapon,
-                 string.Format("With this setting on, the damage done to the ranged weapon when firing will be randomized from 1 to {0}.", deteriorationSettings.damageIncreaseRangedWeapon));
-
-            list.Gap();
-            list.GapLine();
-            list.Label(string.Format("Melee weapons deterioration damage - ({0})", deteriorationSettings.damageIncreaseMeleeWeapon));
-            deteriorationSettings.damageIncreaseMeleeWeapon = (int)list.Slider(deteriorationSettings.damageIncreaseMeleeWeapon, 1f, 10f);
+                  string.Format("With this setting on, the damage done to the ranged weapon when firing will be randomized from 1 to {0}.", deteriorationSettings.damageIncreaseRangedWeapon));
             list.CheckboxLabeled("Randomize damage done to melee weapons", ref deteriorationSettings.damageIncreaseRandomMeleeWeapon,
                 string.Format("With this setting on, the damage done to the melee weapon when used will be randomized from 1 to {0}.", deteriorationSettings.damageIncreaseMeleeWeapon));
-
             list.GapLine();
             list.End();
             Widgets.EndScrollView();

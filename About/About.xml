@@ -12,27 +12,35 @@ Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn
 However, this is not done for weapons and other carried items. This mod rectifies this amongst adding other features.
 
 Features:
--Option to remove vanilla deterioation thus with this mod it's possible to remove all deterioation.
--Possibility to change chance of daily deterioation for equipment, apparell and items in inventory.
--Possibility to increase deterioation damage for equipment, apparell and items in inventory.
+-Option to remove vanilla deterioration thus with this mod it's possible to remove all deterioration.
+-Possibility to change chance of daily deterioration for equipment, apparell and items in inventory.
+-Possibility to increase deterioration damage for equipment, apparell and items in inventory.
 -Randomize damage done to equipment, apparell and items in inventory
--Chance of deterioation damage whenever firing a gun.
--Chance of deterioation damage whenever bashing with weapons.
+-Chance of deterioration damage whenever firing a gun.
+-Chance of deterioration damage whenever bashing with weapons.
 
 -Special Thanks to-
 Jecrell: cause he is great and his code helped me a lot.
 Pardeike: cause of his work on Harmony.
 XeoNovaDan: For his suggestion regarding quality.
-LegendBraki: For his suggestion of disabling the vanilla deterioration.
+LegendBraki: For his many suggestions.
 
 -Links-
 https://ludeon.com/forums/index.php?topic=46890.msg445480
 https://steamcommunity.com/sharedfiles/filedetails/?id=1565674984
 
 Updates:
+2019-08-10
+	-Changed firing logic. Now deals damage per burst instead of per bullet.
+	-Added option "Bullet Matters" which increase percentage chance for deterioration depending on amount of bullets per burst.
+	-Added Changeable Values per bullet.
+	-Made sure World Pawns does not have their items deteriorate.
+	-Option for users to exclude/include NPC deterioration.
+	-Updated mod interface and made a few changes.
+	-Code optimization
 2019-08-08 
 	-Added more deterioration options, 
-	-option for quality affecting deterioation, 
+	-option for quality affecting deterioration, 
 	-bugfix: weapons detoriating upon use no longer cause a null exception. 
 	-New mod settings interface.
 Hotfix
