@@ -39,6 +39,7 @@ Hotfix
 	-Removed [XND]Proper Shotguns support as I have to learn more harmony. 
 	-Fixed the percentage calculations that I had overlooked causing every shot to be deteriorating.
 	-Items with 0 hp or less henceforth are indestructible. (Things like steel)
+	-Inserted a check for items with no HP to not be calculated.
 2018-11-25
 	-resolved issue with turrets and other non-pawn things being calculated.
 2018-11-19

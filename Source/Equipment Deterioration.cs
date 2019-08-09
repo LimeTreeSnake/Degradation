@@ -137,7 +137,8 @@ namespace Equipment_Deterioration {
         }
         public static int DeteriorateCheck(Thing item, float chance) {
             //Log.Message("Max Hitpoints: " + item.MaxHitPoints + " Hitpoints: " + item.HitPoints);
-            if (item.MaxHitPoints <= 1 || item.HitPoints <= 0) {
+            //(Nan) is a phrase used in Medieval times for items that are indestructible.
+            if (item.MaxHitPoints <= 1 || item.HitPoints <= 0 || item.def.useHitPoints == false) {
                 return 0;
             }
             else {
