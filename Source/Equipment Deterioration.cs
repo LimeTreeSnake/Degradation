@@ -70,7 +70,7 @@ namespace Equipment_Deterioration {
         }
         public static bool WarmupComplete_Ranged_PreFix(Verb __instance, ref bool __state) {
             __state = false;
-            if (SettingsHelper.LatestVersion.jammingMatters && !__instance.IsMeleeAttack) {
+            if (SettingsHelper.LatestVersion.jammingMatters && !__instance.IsMeleeAttack && __instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null) {
                 __state = JamCheck(__instance.CasterPawn.equipment.Primary, SettingsHelper.LatestVersion.jammingMattersPercentage);
                 if (__state) {
                     if (__instance.CasterPawn.equipment.Primary.def.soundInteract != null) {
@@ -91,7 +91,7 @@ namespace Equipment_Deterioration {
             return true;
         }
         public static void WarmupComplete_Ranged_PostFix(Verb __instance, bool __state) {
-            if (__instance.IsMeleeAttack ||__state) {
+            if (__instance.IsMeleeAttack || __state) {
                 return;
             }
             if (!SettingsHelper.LatestVersion.npcDeteriorate) {
