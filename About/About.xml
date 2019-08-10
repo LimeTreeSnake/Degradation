@@ -28,9 +28,17 @@ LegendBraki: For his many suggestions.
 -Links-
 https://ludeon.com/forums/index.php?topic=46890.msg445480
 https://steamcommunity.com/sharedfiles/filedetails/?id=1565674984
+https://github.com/LimeTreeSnake/Equipment-Deterioration
 
 Updates:
 2019-08-10
+	-Added Jamming logic.
+	-Rearranged once again the UI.
+	-Fixed an calculation issue where typecasting could have saved me a lot of trouble. <.<
+	-"Bullet Matters" works now as it should. lol.
+	-Clarified info regarding Bullet Matters.
+	-[XND]Proper Shotgun now works and so hopefully should every mod that has its own verbs.
+2019-08-09
 	-Changed firing logic. Now deals damage per burst instead of per bullet.
 	-Added option "Bullet Matters" which increase percentage chance for deterioration depending on amount of bullets per burst.
 	-Added Changeable Values per bullet.

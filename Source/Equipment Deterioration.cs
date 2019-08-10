@@ -2,6 +2,7 @@
 using RimWorld;
 using Verse;
 using System.Collections.Generic;
+using Verse.Sound;
 
 namespace Equipment_Deterioration {
     [StaticConstructorOnStartup]
@@ -9,8 +10,8 @@ namespace Equipment_Deterioration {
         static HarmonyEquipmentDeterioration() {
             HarmonyInstance harmonyInstance = HarmonyInstance.Create("rimworld.limetreesnake.equipmentdeterioration");
             harmonyInstance.Patch(AccessTools.Method(typeof(Pawn_ApparelTracker), "ApparelTrackerTickRare"), new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("ApparelTrackerTickRare_PreFix")), null);
-            harmonyInstance.Patch(AccessTools.Method(typeof(Verb_MeleeAttack), "TryCastShot"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("TryCastShot_Melee_PostFix")), null);
-            harmonyInstance.Patch(AccessTools.Method(typeof(Verb_Shoot), "WarmupComplete"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("WarmupComplete_Ranged_PostFix")), null);
+            harmonyInstance.Patch(AccessTools.Method(typeof(Verb_MeleeAttack), "TryCastShot"), null, new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("TryCastShot_Melee_PostFix")));
+            harmonyInstance.Patch(AccessTools.Method(typeof(Verb), "WarmupComplete"), new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("WarmupComplete_Ranged_PreFix")), new HarmonyMethod(typeof(HarmonyEquipmentDeterioration).GetMethod("WarmupComplete_Ranged_PostFix")));
         }
 
         public static bool ApparelTrackerTickRare_PreFix(Pawn_ApparelTracker __instance) {
@@ -67,7 +68,32 @@ namespace Equipment_Deterioration {
                     __result
                     );
         }
-        public static void WarmupComplete_Ranged_PostFix(Verb __instance) {
+        public static bool WarmupComplete_Ranged_PreFix(Verb __instance, ref bool __state) {
+            __state = false;
+            if (SettingsHelper.LatestVersion.jammingMatters && !__instance.IsMeleeAttack) {
+                __state = JamCheck(__instance.CasterPawn.equipment.Primary, SettingsHelper.LatestVersion.jammingMattersPercentage);
+                if (__state) {
+                    if (__instance.CasterPawn.equipment.Primary.def.soundInteract != null) {
+                        __instance.CasterPawn.equipment.Primary.def.soundInteract.PlayOneShot(new TargetInfo(__instance.CasterPawn.Position, __instance.CasterPawn.Map));
+                    }
+                    if (SettingsHelper.LatestVersion.jammingMattersBreakable) {
+                        if (__instance.CasterPawn.IsColonistPlayerControlled || SettingsHelper.LatestVersion.npcDeteriorate) {
+                            Fire(__instance,
+                            SettingsHelper.LatestVersion.detoriationRangedUsedRate,
+                            SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
+                            SettingsHelper.LatestVersion.damageIncreaseRandomRangedWeapon
+                            );
+                        }
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static void WarmupComplete_Ranged_PostFix(Verb __instance, bool __state) {
+            if (__instance.IsMeleeAttack ||__state) {
+                return;
+            }
             if (!SettingsHelper.LatestVersion.npcDeteriorate) {
                 if (!__instance.CasterPawn.IsColonistPlayerControlled) {
                     return;
@@ -91,7 +117,7 @@ namespace Equipment_Deterioration {
         }
         public static void Fire<T>(T __instance, float deteriorationRate, float damageIncrease, bool useRandom, bool __result = true, bool useAlternateFormula = false) where T : Verb {
             if (deteriorationRate > 0f) {
-                if (__instance.CasterIsPawn && __result) {
+                if (__instance.CasterIsPawn && __result && __instance.CasterPawn.equipment.Primary != null && !__instance.CasterPawn.AnimalOrWildMan()) {
                     if (!SettingsHelper.LatestVersion.npcDeteriorate) {
                         if (!__instance.CasterPawn.IsColonistPlayerControlled) {
                             return;
@@ -99,13 +125,12 @@ namespace Equipment_Deterioration {
                     }
                     float num = deteriorationRate;
                     if (useAlternateFormula) {
-                        int x = Traverse.Create(__instance).Field("ShotsPerBurst").GetValue<int>();
-                        num = deteriorationRate * (1 + (SettingsHelper.LatestVersion.bulletMattersDamage * x) / 100);
+                        int x = Traverse.Create(__instance).Property("ShotsPerBurst").GetValue<int>();
+                        num = deteriorationRate * (1f + (SettingsHelper.LatestVersion.bulletMattersDamage * (float)x) / 100f);
+                        //Log.Message("BulletMatters: " + num + " from " + x + " bullets and a base rate of " + deteriorationRate );
                     }
-                    if (!__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null) {
-                        if (DeteriorateCheck(__instance.CasterPawn.equipment.Primary, num / 100f) > 0) {
-                            Deteriorate(__instance.CasterPawn.equipment.Primary, __instance.CasterPawn, damageIncrease, useRandom);
-                        }
+                    if (DeteriorateCheck(__instance.CasterPawn.equipment.Primary, num / 100f) > 0) {
+                        Deteriorate(__instance.CasterPawn.equipment.Primary, __instance.CasterPawn, damageIncrease, useRandom);
                     }
                 }
             }
@@ -140,18 +165,14 @@ namespace Equipment_Deterioration {
             return input;
         }
         public static int DeteriorateCheck(Thing item, float chance) {
-            if (item.MaxHitPoints <= 1 || item.HitPoints <= 0 || item.def.useHitPoints == false) {
+            if (item.MaxHitPoints <= 1 || item.HitPoints <= 0 || item.def.useHitPoints == false || chance == 0) {
                 return 0;
             }
-            else {
-                if (SettingsHelper.LatestVersion.qualityMatters) {
-                    float x = QualityCheck(item, chance);
-                    return GenMath.RoundRandom(x >= 100f ? 100f : x);
-                }
-                else {
-                    return GenMath.RoundRandom(chance);
-                }
+            float x = chance;
+            if (SettingsHelper.LatestVersion.qualityMatters) {
+                x = QualityCheck(item, chance);
             }
+            return GenMath.RoundRandom(x >= 100f ? 100f : x);
         }
         public static void Deteriorate(Thing item, Pawn pawn, float damageIncrease, bool random) {
             float damage = random && damageIncrease != 1
@@ -165,5 +186,10 @@ namespace Equipment_Deterioration {
             }
             item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
         }
+        public static bool JamCheck(Thing item, float maxPercentage) {
+            float percentage = ((float)maxPercentage / 100f) * (1f - (float)item.HitPoints / (float)item.MaxHitPoints);
+            return DeteriorateCheck(item, percentage) > 0;
+        }
+
     }
 }
