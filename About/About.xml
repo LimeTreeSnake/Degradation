@@ -12,12 +12,17 @@ Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn
 However, this is not done for weapons and other carried items. This mod rectifies this amongst adding other features.
 
 Features:
--Option to remove vanilla deterioration thus with this mod it's possible to remove all deterioration.
--Possibility to change chance of daily deterioration for equipment, apparell and items in inventory.
--Possibility to increase deterioration damage for equipment, apparell and items in inventory.
--Randomize damage done to equipment, apparell and items in inventory
--Chance of deterioration damage whenever firing a gun.
--Chance of deterioration damage whenever bashing with weapons.
+-Option to remove vanilla deterioration thus with this mod it's entirely possible to remove all deterioration.
+-Possibility to change chance of daily deterioration separately  for equipment, apparell and items in inventory carried/worn.
+-Possibility to increase deterioration damage  separately for equipment, apparell and items carried/worn/used.
+-Randomize damage done separately  to  equipment, apparell and items carried/worn/used.
+-Deterioration rate depends on quality of product Awful->Legendary, entirely customizeable.
+-Deterioration for NPC toggleable.
+-Chance of deterioration whenever firing a ranged weapon.
+-Chance of deterioration whenever bashing with weapons.
+-Ranged Weapon jamming
+-Ranged Weapon self damage chance increase per shot in a burst.
+-All features Toggleable
 
 -Special Thanks to-
 Jecrell: cause he is great and his code helped me a lot.
