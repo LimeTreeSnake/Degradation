@@ -61,16 +61,18 @@ namespace Equipment_Deterioration {
                     return;
                 }
             }
-            Fire(__instance,
-                    SettingsHelper.LatestVersion.detoriationMeleeUsedRate,
-                    SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
-                    SettingsHelper.LatestVersion.damageIncreaseRandomMeleeWeapon,
-                    __result
-                    );
+            if (Eligable(__instance)) {
+                Fire(__instance,
+                        SettingsHelper.LatestVersion.detoriationMeleeUsedRate,
+                        SettingsHelper.LatestVersion.damageIncreaseMeleeWeapon,
+                        SettingsHelper.LatestVersion.damageIncreaseRandomMeleeWeapon,
+                        __result
+                        );
+            }
         }
         public static bool WarmupComplete_Ranged_PreFix(Verb __instance, ref bool __state) {
             __state = false;
-            if (SettingsHelper.LatestVersion.jammingMatters && !__instance.IsMeleeAttack && __instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null) {
+            if (SettingsHelper.LatestVersion.jammingMatters && !__instance.IsMeleeAttack && Eligable(__instance)) {
                 __state = JamCheck(__instance.CasterPawn.equipment.Primary, SettingsHelper.LatestVersion.jammingMattersPercentage);
                 if (__state) {
                     if (__instance.CasterPawn.equipment.Primary.def.soundInteract != null) {
@@ -99,13 +101,15 @@ namespace Equipment_Deterioration {
                     return;
                 }
             }
-            Fire(__instance,
-                SettingsHelper.LatestVersion.detoriationRangedUsedRate,
-                SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
-                SettingsHelper.LatestVersion.damageIncreaseRandomRangedWeapon,
-                true,
-                SettingsHelper.LatestVersion.bulletMatters
-                );
+            if (Eligable(__instance)) {
+                Fire(__instance,
+                    SettingsHelper.LatestVersion.detoriationRangedUsedRate,
+                    SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
+                    SettingsHelper.LatestVersion.damageIncreaseRandomRangedWeapon,
+                    true,
+                    SettingsHelper.LatestVersion.bulletMatters
+                    );
+            }
         }
 
         public static void DailyDegrade<T>(List<T> items, Pawn pawn, float deteriorateRate, float damageIncrease, bool useRandom) where T : Thing {
@@ -117,7 +121,7 @@ namespace Equipment_Deterioration {
         }
         public static void Fire<T>(T __instance, float deteriorationRate, float damageIncrease, bool useRandom, bool __result = true, bool useAlternateFormula = false) where T : Verb {
             if (deteriorationRate > 0f) {
-                if (__instance.CasterIsPawn && __result && __instance.CasterPawn.equipment.Primary != null && !__instance.CasterPawn.AnimalOrWildMan()) {
+                if (__result) {
                     if (!SettingsHelper.LatestVersion.npcDeteriorate) {
                         if (!__instance.CasterPawn.IsColonistPlayerControlled) {
                             return;
@@ -189,6 +193,13 @@ namespace Equipment_Deterioration {
         public static bool JamCheck(Thing item, float maxPercentage) {
             float percentage = ((float)maxPercentage / 100f) * (1f - (float)item.HitPoints / (float)item.MaxHitPoints);
             return DeteriorateCheck(item, percentage) > 0;
+        }
+
+        public static bool Eligable(Verb __instance) {
+            if (!__instance.CasterIsPawn && __instance.CasterPawn.equipment.Primary != null && !__instance.CasterPawn.AnimalOrWildMan()) {
+                return true;
+            }
+            return false;
         }
 
     }
