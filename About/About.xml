@@ -41,6 +41,9 @@ Minigun2 uses logic that may cause some extreme deteriorations when used.
 Adding/removing this mod mid-save may or may not have unforeseen consequences  but so does all mods.
 
 Updates:
+2019-08-14
+	-Textbox input for percentage value in the equipment deterioration settings.
+	-Button to revert to default settings.
 2019-08-10
 	-Added Jamming logic.
 	-Rearranged once again the UI.
