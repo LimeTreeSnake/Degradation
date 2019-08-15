@@ -44,6 +44,8 @@ Updates:
 2019-08-14
 	-Textbox input for percentage value in the equipment deterioration settings.
 	-Button to revert to default settings.
+	Fix:
+		-Textbox decimal values possible.
 2019-08-10
 	-Added Jamming logic.
 	-Rearranged once again the UI.
