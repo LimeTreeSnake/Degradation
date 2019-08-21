@@ -226,33 +226,33 @@ namespace Equipment_Deterioration {
             if (deteriorationSettings.qualityMatters) {
                 list.Label(string.Format("A lower value means less chance for items taking deterioration damage."));
 
-                float.TryParse(list.TextEntryLabeled("Awful ", string.Format("{0:#0.00 }", deteriorationSettings.awful)), out deteriorationSettings.awful);
+                float.TryParse(list.TextEntryLabeled("Awful ", string.Format("{0:#0.00}", deteriorationSettings.awful)), out deteriorationSettings.awful);
                 deteriorationSettings.awful = Mathf.Round(list.Slider(deteriorationSettings.awful, 0f, 100f) * 100f) / 100f;
-                deteriorationSettings.awful = deteriorationSettings.awful > 100f ? 100f : deteriorationSettings.awful < 0 ? 0f : deteriorationSettings.awful;
+                deteriorationSettings.awful = deteriorationSettings.awful > 100f ? 100f : deteriorationSettings.awful < 0f ? 0f : deteriorationSettings.awful;
 
-                float.TryParse(list.TextEntryLabeled("Poor ", string.Format("{0:#0.00 }", deteriorationSettings.poor)), out deteriorationSettings.poor);
+                float.TryParse(list.TextEntryLabeled("Poor ", string.Format("{0:#0.00}", deteriorationSettings.poor)), out deteriorationSettings.poor);
                 deteriorationSettings.poor = Mathf.Round(list.Slider(deteriorationSettings.poor, 0f, 100f) * 100f) / 100f;
-                deteriorationSettings.poor = deteriorationSettings.poor > 100f ? 100f : deteriorationSettings.poor < 0 ? 0f : deteriorationSettings.poor;
+                deteriorationSettings.poor = deteriorationSettings.poor > 100f ? 100f : deteriorationSettings.poor < 0f ? 0f : deteriorationSettings.poor;
 
-                float.TryParse(list.TextEntryLabeled("Normal ", string.Format("{0:#0.00 }", deteriorationSettings.normal)), out deteriorationSettings.normal);
+                float.TryParse(list.TextEntryLabeled("Normal ", string.Format("{0:#0.00}", deteriorationSettings.normal)), out deteriorationSettings.normal);
                 deteriorationSettings.normal = Mathf.Round(list.Slider(deteriorationSettings.normal, 0f, 100f) * 100f) / 100f;
-                deteriorationSettings.normal = deteriorationSettings.normal > 100f ? 100f : deteriorationSettings.normal < 0 ? 0f : deteriorationSettings.normal;
+                deteriorationSettings.normal = deteriorationSettings.normal > 100f ? 100f : deteriorationSettings.normal < 0f ? 0f : deteriorationSettings.normal;
 
-                float.TryParse(list.TextEntryLabeled("Good ", string.Format("{0:#0.00 }", deteriorationSettings.good)), out deteriorationSettings.good);
+                float.TryParse(list.TextEntryLabeled("Good ", string.Format("{0:#0.00}", deteriorationSettings.good)), out deteriorationSettings.good);
                 deteriorationSettings.good = Mathf.Round(list.Slider(deteriorationSettings.good, 0f, 100f) * 100f) / 100f;
-                deteriorationSettings.good = deteriorationSettings.good > 100f ? 100f : deteriorationSettings.good < 0 ? 0f : deteriorationSettings.good;
+                deteriorationSettings.good = deteriorationSettings.good > 100f ? 100f : deteriorationSettings.good < 0f ? 0f : deteriorationSettings.good;
 
-                float.TryParse(list.TextEntryLabeled("Excellent ", string.Format("{0:#0.00 }", deteriorationSettings.excellent)), out deteriorationSettings.excellent);
+                float.TryParse(list.TextEntryLabeled("Excellent ", string.Format("{0:#0.00}", deteriorationSettings.excellent)), out deteriorationSettings.excellent);
                 deteriorationSettings.excellent = Mathf.Round(list.Slider(deteriorationSettings.excellent, 0f, 100f) * 100f) / 100f;
-                deteriorationSettings.excellent = deteriorationSettings.excellent > 100f ? 100f : deteriorationSettings.excellent < 0 ? 0f : deteriorationSettings.excellent;
+                deteriorationSettings.excellent = deteriorationSettings.excellent > 100f ? 100f : deteriorationSettings.excellent < 0f ? 0f : deteriorationSettings.excellent;
 
-                float.TryParse(list.TextEntryLabeled("Masterwork ", string.Format("{0:#0.00 }", deteriorationSettings.masterwork)), out deteriorationSettings.masterwork);
+                float.TryParse(list.TextEntryLabeled("Masterwork ", string.Format("{0:#0.00}", deteriorationSettings.masterwork)), out deteriorationSettings.masterwork);
                 deteriorationSettings.masterwork = Mathf.Round(list.Slider(deteriorationSettings.masterwork, 0f, 100f) * 100f) / 100f;
-                deteriorationSettings.masterwork = deteriorationSettings.masterwork > 100f ? 100f : deteriorationSettings.masterwork < 0 ? 0f : deteriorationSettings.masterwork;
+                deteriorationSettings.masterwork = deteriorationSettings.masterwork > 100f ? 100f : deteriorationSettings.masterwork < 0f ? 0f : deteriorationSettings.masterwork;
 
-                float.TryParse(list.TextEntryLabeled("Legendary ", string.Format("{0:#0.00 }", deteriorationSettings.legendary)), out deteriorationSettings.legendary);
+                float.TryParse(list.TextEntryLabeled("Legendary ", string.Format("{0:#0.00}", deteriorationSettings.legendary)), out deteriorationSettings.legendary);
                 deteriorationSettings.legendary = Mathf.Round(list.Slider(deteriorationSettings.legendary, 0f, 100f) * 100f) / 100f;
-                deteriorationSettings.legendary = deteriorationSettings.legendary > 100f ? 100f : deteriorationSettings.legendary < 0 ? 0f : deteriorationSettings.legendary;
+                deteriorationSettings.legendary = deteriorationSettings.legendary > 100f ? 100f : deteriorationSettings.legendary < 0f ? 0f : deteriorationSettings.legendary;
 
                 list.Gap();
             }
@@ -260,7 +260,7 @@ namespace Equipment_Deterioration {
             list.Gap();
             list.CheckboxLabeled("Apparell Deteriorate", ref deteriorationSettings.deteriorateApparell, string.Format("This mode ensures that apparell worn by pawns detoriates with a {0}% chance per day", deteriorationSettings.detoriationApparellRate));
             if (deteriorationSettings.deteriorateApparell) {
-                float.TryParse(list.TextEntryLabeled("Daily apparell deterioration rate ", string.Format("{0:#0.00 }", deteriorationSettings.detoriationApparellRate)), out deteriorationSettings.detoriationApparellRate);
+                float.TryParse(list.TextEntryLabeled("Daily apparell deterioration rate ", string.Format("{0:#0.00}", deteriorationSettings.detoriationApparellRate)), out deteriorationSettings.detoriationApparellRate);
                 deteriorationSettings.detoriationApparellRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationApparellRate, 0f, 100f) * 100f) / 100f;
                 deteriorationSettings.detoriationApparellRate = deteriorationSettings.detoriationApparellRate > 100f ? 100f : deteriorationSettings.detoriationApparellRate < 0 ? 0f : deteriorationSettings.detoriationApparellRate;
                 list.Label(string.Format("({0}) Apparell worn deterioration damage", deteriorationSettings.damageIncreaseApparell));
@@ -272,7 +272,7 @@ namespace Equipment_Deterioration {
             list.GapLine();
             list.CheckboxLabeled("Equipment Deteriorate", ref deteriorationSettings.deteriorateEquipment, string.Format("This mode ensures that pawn's held weapon detoriates with a {0}% chance per day", deteriorationSettings.detoriationEquipmentRate));
             if (deteriorationSettings.deteriorateEquipment) {
-                float.TryParse(list.TextEntryLabeled("Daily equipment deterioration rate ", string.Format("{0:#0.00 }", deteriorationSettings.detoriationEquipmentRate)), out deteriorationSettings.detoriationEquipmentRate);
+                float.TryParse(list.TextEntryLabeled("Daily equipment deterioration rate ", string.Format("{0:#0.00}", deteriorationSettings.detoriationEquipmentRate)), out deteriorationSettings.detoriationEquipmentRate);
                 deteriorationSettings.detoriationEquipmentRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationEquipmentRate, 0f, 100f) * 100f) / 100f;
                 deteriorationSettings.detoriationEquipmentRate = deteriorationSettings.detoriationEquipmentRate > 100f ? 100f : deteriorationSettings.detoriationEquipmentRate < 0 ? 0f : deteriorationSettings.detoriationEquipmentRate;
                 list.Label(string.Format("({0}) Equipment worn deterioration damage", deteriorationSettings.damageIncreaseEquipment));
@@ -286,7 +286,7 @@ namespace Equipment_Deterioration {
 
             list.CheckboxLabeled("Items Deteriorate", ref deteriorationSettings.deteriorateInventory, string.Format("This mode ensures that items carried by pawns detoriates with a {0}% chance per day", deteriorationSettings.detoriationInventoryRate));
             if (deteriorationSettings.deteriorateInventory) {
-                float.TryParse(list.TextEntryLabeled("Daily item deterioration rate ", string.Format("{0:#0.00 }", deteriorationSettings.detoriationInventoryRate)), out deteriorationSettings.detoriationInventoryRate);
+                float.TryParse(list.TextEntryLabeled("Daily item deterioration rate ", string.Format("{0:#0.00}", deteriorationSettings.detoriationInventoryRate)), out deteriorationSettings.detoriationInventoryRate);
                 deteriorationSettings.detoriationInventoryRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationInventoryRate, 0f, 100f) * 100f) / 100f;
                 deteriorationSettings.detoriationInventoryRate = deteriorationSettings.detoriationInventoryRate > 100f ? 100f : deteriorationSettings.detoriationInventoryRate < 0 ? 0f : deteriorationSettings.detoriationInventoryRate;
                 list.Label(string.Format("({0}) Items carried deterioration damage", deteriorationSettings.damageIncreaseItem));
@@ -300,7 +300,7 @@ namespace Equipment_Deterioration {
 
             list.CheckboxLabeled("Melee hit detoriates", ref deteriorationSettings.deteriorateMelee, string.Format("This mode ensures that weapons used in melee deteriorates with a {0}% chance", deteriorationSettings.detoriationMeleeUsedRate));
             if (deteriorationSettings.deteriorateMelee) {
-                float.TryParse(list.TextEntryLabeled("Melee deterioration rate ", string.Format("{0:#0.00 }", deteriorationSettings.detoriationMeleeUsedRate)), out deteriorationSettings.detoriationMeleeUsedRate);
+                float.TryParse(list.TextEntryLabeled("Melee deterioration rate ", string.Format("{0:#0.00}", deteriorationSettings.detoriationMeleeUsedRate)), out deteriorationSettings.detoriationMeleeUsedRate);
                 deteriorationSettings.detoriationMeleeUsedRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationMeleeUsedRate, 0f, 100f) * 100f) / 100f;
                 deteriorationSettings.detoriationMeleeUsedRate = deteriorationSettings.detoriationMeleeUsedRate > 100f ? 100f : deteriorationSettings.detoriationMeleeUsedRate < 0 ? 0f : deteriorationSettings.detoriationMeleeUsedRate;
                 list.Label(string.Format("({0}) Melee weapons deterioration damage", deteriorationSettings.damageIncreaseMeleeWeapon));
@@ -315,7 +315,7 @@ namespace Equipment_Deterioration {
 
             list.CheckboxLabeled("Shooting Detoriates", ref deteriorationSettings.deteriorateRanged, string.Format("This mode ensures that used ranged weapons deteriorates with a {0}% chance", deteriorationSettings.detoriationRangedUsedRate));
             if (deteriorationSettings.deteriorateRanged) {
-                float.TryParse(list.TextEntryLabeled("Ranged deterioration rate ", string.Format("{0:#0.00 }", deteriorationSettings.detoriationRangedUsedRate)), out deteriorationSettings.detoriationRangedUsedRate);
+                float.TryParse(list.TextEntryLabeled("Ranged deterioration rate ", string.Format("{0:#0.00}", deteriorationSettings.detoriationRangedUsedRate)), out deteriorationSettings.detoriationRangedUsedRate);
                 deteriorationSettings.detoriationRangedUsedRate = Mathf.Round(list.Slider(deteriorationSettings.detoriationRangedUsedRate, 0f, 100f) * 100f) / 100f;
                 deteriorationSettings.detoriationRangedUsedRate = deteriorationSettings.detoriationRangedUsedRate > 100f ? 100f : deteriorationSettings.detoriationRangedUsedRate < 0 ? 0f : deteriorationSettings.detoriationRangedUsedRate;
                 list.Label(string.Format("({0}) Ranged weapons deterioration damage", deteriorationSettings.damageIncreaseRangedWeapon));
@@ -329,7 +329,7 @@ namespace Equipment_Deterioration {
                     "\n\nThus firing 24 bullets in a row gives a " + deteriorationSettings.detoriationRangedUsedRate * (1 + (SettingsHelper.LatestVersion.bulletMattersDamage * 24) / 100) + "% chance for deterioration instead of {0} with this mode on. ",
                         deteriorationSettings.bulletMattersDamage, deteriorationSettings.detoriationRangedUsedRate));
                 if (deteriorationSettings.bulletMatters) {
-                    float.TryParse(list.TextEntryLabeled("Bullet rate ", string.Format("{0:#0.00 }", deteriorationSettings.bulletMattersDamage)), out deteriorationSettings.bulletMattersDamage);
+                    float.TryParse(list.TextEntryLabeled("Bullet rate ", string.Format("{0:#0.00}", deteriorationSettings.bulletMattersDamage)), out deteriorationSettings.bulletMattersDamage);
                     deteriorationSettings.bulletMattersDamage = Mathf.Round(list.Slider(deteriorationSettings.bulletMattersDamage, 1f, 100f) * 100f) / 100f;
                     deteriorationSettings.bulletMattersDamage = deteriorationSettings.bulletMattersDamage > 100f ? 100f : deteriorationSettings.bulletMattersDamage < 0 ? 0f : deteriorationSettings.bulletMattersDamage;
                     list.Gap();
@@ -342,7 +342,7 @@ namespace Equipment_Deterioration {
                     "There's a " + (((float)deteriorationSettings.jammingMattersPercentage / 100f) * (1f - (75f / 100f))) * 100f + "% chance of jamming given this example.",
                         deteriorationSettings.jammingMattersPercentage));
                 if (deteriorationSettings.jammingMatters) {
-                    float.TryParse(list.TextEntryLabeled("Jamming rate ", string.Format("{0:#0.00 }", deteriorationSettings.jammingMattersPercentage)), out deteriorationSettings.jammingMattersPercentage);
+                    float.TryParse(list.TextEntryLabeled("Jamming rate ", string.Format("{0:#0.00}", deteriorationSettings.jammingMattersPercentage)), out deteriorationSettings.jammingMattersPercentage);
                     deteriorationSettings.jammingMattersPercentage = Mathf.Round(list.Slider(deteriorationSettings.jammingMattersPercentage, 1f, 100f) * 100f) / 100f;
                     deteriorationSettings.jammingMattersPercentage = deteriorationSettings.jammingMattersPercentage > 100f ? 100f : deteriorationSettings.jammingMattersPercentage < 0 ? 0f : deteriorationSettings.jammingMattersPercentage;
                     list.CheckboxLabeled("Jamming Damages", ref deteriorationSettings.jammingMattersBreakable, string.Format("This option enables chance for weapon to take damage when jamming as per shooting deterioration calculation."));

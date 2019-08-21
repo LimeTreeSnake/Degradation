@@ -196,8 +196,8 @@ namespace Equipment_Deterioration {
         }
 
         public static bool Eligable(Verb __instance) {
-            if (!__instance.CasterIsPawn && __instance.CasterPawn.equipment.Primary != null && !__instance.CasterPawn.AnimalOrWildMan()) {
-                return true;
+            if (__instance.CasterIsPawn && __instance.CasterPawn.equipment.Primary != null && !__instance.CasterPawn.AnimalOrWildMan()) {
+                return true; 
             }
             return false;
         }

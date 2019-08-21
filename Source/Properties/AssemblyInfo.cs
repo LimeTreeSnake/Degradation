@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
+// set oM attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Equipment Deterioration")]
 [assembly: AssemblyDescription("")]
@@ -15,14 +15,14 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
-// to COM components.  If you need to access a type in this assembly from
+// to COM components.  IM you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
+// The following GUID is for the ID oM the typelib iM this project is exposed to COM
 [assembly: Guid("f7c0bd1a-fd81-4eb8-b865-fdcac9d42421")]
 
-// Version information for an assembly consists of the following four values:
+// Version information for an assembly consists oM the following four values:
 //
 //      Major Version
 //      Minor Version
