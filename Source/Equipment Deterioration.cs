@@ -29,19 +29,22 @@ namespace Equipment_Deterioration {
 
             if (ticksGame - wearoutTick >= 60000) {
                 //Apparell
-                DailyDegrade(__instance.pawn.apparel.WornApparel,
-                    __instance.pawn,
-                    SettingsHelper.LatestVersion.detoriationApparellRate,
-                    SettingsHelper.LatestVersion.damageIncreaseApparell,
-                    SettingsHelper.LatestVersion.damageIncreaseRandomApparell);
+                if (SettingsHelper.LatestVersion.deteriorateApparell)
+                    DailyDegrade(__instance.pawn.apparel.WornApparel,
+                        __instance.pawn,
+                        SettingsHelper.LatestVersion.detoriationApparellRate,
+                        SettingsHelper.LatestVersion.damageIncreaseApparell,
+                        SettingsHelper.LatestVersion.damageIncreaseRandomApparell);
                 //Equipment
-                DailyDegrade(__instance.pawn.equipment.AllEquipmentListForReading,
+                if (SettingsHelper.LatestVersion.deteriorateEquipment)
+                    DailyDegrade(__instance.pawn.equipment.AllEquipmentListForReading,
                     __instance.pawn,
                     SettingsHelper.LatestVersion.detoriationEquipmentRate,
                     SettingsHelper.LatestVersion.damageIncreaseEquipment,
                     SettingsHelper.LatestVersion.damageIncreaseRandomEquipment);
                 //Items
-                DailyDegrade(__instance.pawn.inventory.innerContainer.InnerListForReading,
+                if (SettingsHelper.LatestVersion.deteriorateInventory)
+                    DailyDegrade(__instance.pawn.inventory.innerContainer.InnerListForReading,
                     __instance.pawn,
                     SettingsHelper.LatestVersion.detoriationInventoryRate,
                     SettingsHelper.LatestVersion.damageIncreaseItem,
@@ -61,7 +64,7 @@ namespace Equipment_Deterioration {
                     return;
                 }
             }
-            if (Eligable(__instance)) {
+            if (Eligable(__instance) && SettingsHelper.LatestVersion.deteriorateMelee) {
                 Fire(__instance,
                         SettingsHelper.LatestVersion.detoriationMeleeUsedRate,
                         SettingsHelper.LatestVersion.damageIncreaseMeleeWeapon,
@@ -72,7 +75,7 @@ namespace Equipment_Deterioration {
         }
         public static bool WarmupComplete_Ranged_PreFix(Verb __instance, ref bool __state) {
             __state = false;
-            if (Eligable(__instance) && SettingsHelper.LatestVersion.jammingMatters && !__instance.IsMeleeAttack ) {
+            if (Eligable(__instance) && SettingsHelper.LatestVersion.jammingMatters && !__instance.IsMeleeAttack) {
                 __state = JamCheck(__instance.CasterPawn.equipment.Primary, SettingsHelper.LatestVersion.jammingMattersPercentage);
                 if (__state) {
                     if (__instance.CasterPawn.equipment.Primary.def.soundInteract != null) {
@@ -101,7 +104,7 @@ namespace Equipment_Deterioration {
                     return;
                 }
             }
-            if (Eligable(__instance)) {
+            if (Eligable(__instance) && SettingsHelper.LatestVersion.deteriorateRanged) {
                 Fire(__instance,
                     SettingsHelper.LatestVersion.detoriationRangedUsedRate,
                     SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
@@ -196,8 +199,8 @@ namespace Equipment_Deterioration {
         }
 
         public static bool Eligable(Verb __instance) {
-            if (  __instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null ) {
-                return true; 
+            if (__instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null) {
+                return true;
             }
             return false;
         }
