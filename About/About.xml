@@ -41,8 +41,8 @@ Minigun2 uses logic that may cause some extreme deteriorations when used.
 Adding/removing this mod mid-save may or may not have unforeseen consequences  but so does all mods.
 
 Updates:
-2018-08-21
-	Fix for weapons not deteriorating due to boolean added when jamming. X__X
+2018-09-08
+	-Added check that it actually is activated if it should deteriorate instead of taking it for granted...
 
 -License-
 You may use this code as however you want. However, do notify me as I'd love to hear if people find use of my code! :)
