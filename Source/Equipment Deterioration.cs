@@ -96,15 +96,15 @@ namespace Equipment_Deterioration {
             return true;
         }
         public static void WarmupComplete_Ranged_PostFix(Verb __instance, bool __state) {
-            if (Eligable(__instance) && __instance.IsMeleeAttack || __state) {
+            if (!Eligable(__instance) || __instance.IsMeleeAttack || __state) {
                 return;
             }
             if (!SettingsHelper.LatestVersion.npcDeteriorate) {
-                if (!__instance.CasterPawn.IsColonistPlayerControlled) {
+                if ( !__instance.CasterPawn.IsColonistPlayerControlled) {
                     return;
                 }
             }
-            if (Eligable(__instance) && SettingsHelper.LatestVersion.deteriorateRanged) {
+            if (SettingsHelper.LatestVersion.deteriorateRanged) {
                 Fire(__instance,
                     SettingsHelper.LatestVersion.detoriationRangedUsedRate,
                     SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
@@ -199,7 +199,7 @@ namespace Equipment_Deterioration {
         }
 
         public static bool Eligable(Verb __instance) {
-            if (__instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan() && __instance.CasterPawn.equipment.Primary != null) {
+            if (__instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan()&& !__instance.caster.def.IsBuildingArtificial && __instance.CasterPawn.equipment != null && __instance.CasterPawn.equipment.Primary != null) {
                 return true;
             }
             return false;
