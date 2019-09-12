@@ -11,39 +11,6 @@ Do you want things to deteriorate with time and use?
 Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn, whether it should have it deteriorate by one point or not.
 However, this is not done for weapons and other carried items. This mod rectifies this amongst adding other features.
 
-Features:
--Option to remove vanilla deterioration thus with this mod it's entirely possible to remove all deterioration.
--Possibility to change chance of daily deterioration separately  for equipment, apparell and items in inventory carried/worn.
--Possibility to increase deterioration damage  separately for equipment, apparell and items carried/worn/used.
--Randomize damage done separately  to  equipment, apparell and items carried/worn/used.
--Deterioration rate depends on quality of product Awful->Legendary, entirely customizeable.
--Deterioration for NPC toggleable.
--Chance of deterioration whenever firing a ranged weapon.
--Chance of deterioration whenever bashing with weapons.
--Ranged Weapon jamming
--Ranged Weapon self damage chance increase per shot in a burst.
--All features Toggleable
-
--Special Thanks to-
-Jecrell: cause he is great and his code helped me a lot.
-Pardeike: cause of his work on Harmony.
-XeoNovaDan: For his suggestion regarding quality.
-LegendBraki: For his many suggestions.
-
--Links-
-https://ludeon.com/forums/index.php?topic=46890.msg445480
-https://steamcommunity.com/sharedfiles/filedetails/?id=1565674984
-https://github.com/LimeTreeSnake/Equipment-Deterioration
-https://discord.gg/3Xtr7e9 
-
--Compatibility-
-Minigun2 uses logic that may cause some extreme deteriorations when used.
-Adding/removing this mod mid-save may or may not have unforeseen consequences  but so does all mods.
-
-Updates:
-2018-09-08
-	-Added check that it actually is activated if it should deteriorate instead of taking it for granted...
-
 -License-
 You may use this code as however you want. However, do notify me as I'd love to hear if people find use of my code! :)
 	</description>
