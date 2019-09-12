@@ -48,6 +48,7 @@ namespace Equipment_Deterioration {
         private static readonly float base_jammingMatterPercentage = 33;
 
 
+        private static readonly bool base_minigunExcemption = true;
 
         #endregion Fields
 
@@ -95,6 +96,7 @@ namespace Equipment_Deterioration {
         public float jammingMattersPercentage = base_jammingMatterPercentage;
 
 
+        public bool minigunExcemption = base_minigunExcemption;
 
         #endregion Properties
 
@@ -141,6 +143,8 @@ namespace Equipment_Deterioration {
             Scribe_Values.Look(ref jammingMatters, "JammingMatters", base_jammingMatters);
             Scribe_Values.Look(ref jammingMattersBreakable, "JammingMattersBreakable", base_jammingMattersBreakable);
             Scribe_Values.Look(ref jammingMattersPercentage, "JammingMattersPercentage", base_jammingMatterPercentage);
+
+            Scribe_Values.Look(ref minigunExcemption, "MinigunExcemption", base_minigunExcemption);
         }
 
         public void Reset() {
@@ -185,6 +189,7 @@ namespace Equipment_Deterioration {
             jammingMatters = base_jammingMatters;
             jammingMattersBreakable = base_jammingMattersBreakable;
             jammingMattersPercentage = base_jammingMatterPercentage;
+            minigunExcemption = base_minigunExcemption;
         }
     }
 
@@ -348,6 +353,7 @@ namespace Equipment_Deterioration {
                     list.CheckboxLabeled("Jamming Damages", ref deteriorationSettings.jammingMattersBreakable, string.Format("This option enables chance for weapon to take damage when jamming as per shooting deterioration calculation."));
                 }
             }
+            list.CheckboxLabeled("Excempt Minigun", ref deteriorationSettings.minigunExcemption, string.Format("This mode ensures that miniguns are not calculated", deteriorationSettings.minigunExcemption));
             list.Gap();
             list.GapLine();
 

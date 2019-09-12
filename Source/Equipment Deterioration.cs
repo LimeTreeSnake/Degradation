@@ -124,6 +124,9 @@ namespace Equipment_Deterioration {
         }
         public static void Fire<T>(T __instance, float deteriorationRate, float damageIncrease, bool useRandom, bool __result = true, bool useAlternateFormula = false) where T : Verb {
             if (deteriorationRate > 0f) {
+                if (SettingsHelper.LatestVersion.minigunExcemption && __instance.CasterPawn.equipment.Primary.def.defName == "Gun_Minigun") {
+                    return;
+                }
                 if (__result) {
                     if (!SettingsHelper.LatestVersion.npcDeteriorate) {
                         if (!__instance.CasterPawn.IsColonistPlayerControlled) {
