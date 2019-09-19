@@ -100,7 +100,7 @@ namespace Equipment_Deterioration {
                 return;
             }
             if (!SettingsHelper.LatestVersion.npcDeteriorate) {
-                if ( !__instance.CasterPawn.IsColonistPlayerControlled) {
+                if (!__instance.CasterPawn.IsColonistPlayerControlled) {
                     return;
                 }
             }
@@ -189,12 +189,17 @@ namespace Equipment_Deterioration {
                 ? Rand.Range(1, damageIncrease)
                 : damageIncrease;
             //Log.Message("Item: " + item.def.defName + " on Pawn: " + pawn.Name + " Took " + damage + " damage.");
-            if (damage > item.HitPoints && PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
-                string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(item.def, item.Stuff), pawn);
-                str = str.CapitalizeFirst();
-                Messages.Message(str, pawn, MessageTypeDefOf.NegativeEvent);
+            if (damage > item.HitPoints) {
+                if (PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
+                    string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(item.def, item.Stuff), pawn);
+                    str = str.CapitalizeFirst();
+                    Messages.Message(str, pawn, MessageTypeDefOf.NegativeEvent);
+                }
+                item.Destroy();
             }
-            item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
+            else {
+                item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
+            }
         }
         public static bool JamCheck(Thing item, float maxPercentage) {
             float percentage = ((float)maxPercentage / 100f) * (1f - (float)item.HitPoints / (float)item.MaxHitPoints);
@@ -202,7 +207,7 @@ namespace Equipment_Deterioration {
         }
 
         public static bool Eligable(Verb __instance) {
-            if (__instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan()&& !__instance.caster.def.IsBuildingArtificial && __instance.CasterPawn.equipment != null && __instance.CasterPawn.equipment.Primary != null) {
+            if (__instance.CasterIsPawn && !__instance.CasterPawn.AnimalOrWildMan() && !__instance.caster.def.IsBuildingArtificial && __instance.CasterPawn.equipment != null && __instance.CasterPawn.equipment.Primary != null) {
                 return true;
             }
             return false;
