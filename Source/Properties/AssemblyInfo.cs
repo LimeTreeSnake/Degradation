@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set oM attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Equipment Deterioration")]
+[assembly: AssemblyTitle("Degradation")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Equipment Deterioration")]
+[assembly: AssemblyProduct("Degradation")]
 [assembly: AssemblyCopyright("LimeTreeSnake©2018")]
 [assembly: AssemblyTrademark("LimeTreeSnake")]
 [assembly: AssemblyCulture("")]

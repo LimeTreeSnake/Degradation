@@ -1,2 +1,9 @@
 2019-09-19
 -Remade weapon deterioration code, hopefully destroy's things properly.
+
+2019-09-24
+-Renamed Equipment Deterioration to Degradation.
+-Cleaned code for visibility
+-Made use of better verb to improve performance.
+-Made it work better with my new mod incoming soon.
+
