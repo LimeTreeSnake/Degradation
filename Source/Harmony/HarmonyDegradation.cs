@@ -16,44 +16,46 @@ namespace Degradation {
 
         public static bool ApparelTrackerTickRare_PreFix(Pawn_ApparelTracker __instance) {
             //Log.Message(__instance.pawn + " Detoriates ");
-            if (!SettingsHelper.LatestVersion.npcdegrade || !__instance.pawn.Spawned) {
+            if (!__instance.pawn.IsColonist && SettingsHelper.LatestVersion.npcdegrade) {
                 return !SettingsHelper.LatestVersion.removeVanillaSettings;
             }
-            int ticksGame = Find.TickManager.TicksGame;
-            int wearoutTick = Traverse.Create(__instance).Field("lastApparelWearoutTick").GetValue<int>();
-            if (wearoutTick < 0) {
-                if (SettingsHelper.LatestVersion.removeVanillaSettings) {
-                    Traverse.Create(__instance).Field("lastApparelWearoutTick").SetValue(ticksGame);
+            else if (__instance.pawn.Spawned) {
+                int ticksGame = Find.TickManager.TicksGame;
+                int wearoutTick = Traverse.Create(__instance).Field("lastApparelWearoutTick").GetValue<int>();
+                if (wearoutTick < 0) {
+                    if (SettingsHelper.LatestVersion.removeVanillaSettings) {
+                        Traverse.Create(__instance).Field("lastApparelWearoutTick").SetValue(ticksGame);
+                    }
                 }
-            }
-
-            if (ticksGame - wearoutTick >= 60000) {
-                //Apparell
-                if (SettingsHelper.LatestVersion.degradeApparell)
-                    DailyDegrade(__instance.pawn.apparel.WornApparel,
+                if (ticksGame - wearoutTick >= 60000) {
+                    //Apparell
+                    if (SettingsHelper.LatestVersion.degradeApparell)
+                        DailyDegrade(__instance.pawn.apparel.WornApparel,
+                            __instance.pawn,
+                            SettingsHelper.LatestVersion.degradationApparellRate,
+                            SettingsHelper.LatestVersion.damageIncreaseApparell,
+                            SettingsHelper.LatestVersion.damageIncreaseRandomApparell);
+                    //Equipment
+                    if (SettingsHelper.LatestVersion.degradeEquipment)
+                        DailyDegrade(__instance.pawn.equipment.AllEquipmentListForReading,
                         __instance.pawn,
-                        SettingsHelper.LatestVersion.degradationApparellRate,
-                        SettingsHelper.LatestVersion.damageIncreaseApparell,
-                        SettingsHelper.LatestVersion.damageIncreaseRandomApparell);
-                //Equipment
-                if (SettingsHelper.LatestVersion.degradeEquipment)
-                    DailyDegrade(__instance.pawn.equipment.AllEquipmentListForReading,
-                    __instance.pawn,
-                    SettingsHelper.LatestVersion.degradationEquipmentRate,
-                    SettingsHelper.LatestVersion.damageIncreaseEquipment,
-                    SettingsHelper.LatestVersion.damageIncreaseRandomEquipment);
-                //Items
-                if (SettingsHelper.LatestVersion.degradeInventory)
-                    DailyDegrade(__instance.pawn.inventory.innerContainer.InnerListForReading,
-                    __instance.pawn,
-                    SettingsHelper.LatestVersion.degradationInventoryRate,
-                    SettingsHelper.LatestVersion.damageIncreaseItem,
-                    SettingsHelper.LatestVersion.damageIncreaseRandomItem);
+                        SettingsHelper.LatestVersion.degradationEquipmentRate,
+                        SettingsHelper.LatestVersion.damageIncreaseEquipment,
+                        SettingsHelper.LatestVersion.damageIncreaseRandomEquipment);
+                    //Items
+                    if (SettingsHelper.LatestVersion.degradeInventory)
+                        DailyDegrade(__instance.pawn.inventory.innerContainer.InnerListForReading,
+                        __instance.pawn,
+                        SettingsHelper.LatestVersion.degradationInventoryRate,
+                        SettingsHelper.LatestVersion.damageIncreaseItem,
+                        SettingsHelper.LatestVersion.damageIncreaseRandomItem);
 
-                //If the vanilla degradation is off, make sure the lastApparelWearoutTick is updated.
-                if (SettingsHelper.LatestVersion.removeVanillaSettings) {
-                    Traverse.Create(__instance).Field("lastApparelWearoutTick").SetValue(ticksGame);
+                    //If the vanilla degradation is off, make sure the lastApparelWearoutTick is updated.
+                    if (SettingsHelper.LatestVersion.removeVanillaSettings) {
+                        Traverse.Create(__instance).Field("lastApparelWearoutTick").SetValue(ticksGame);
+                    }
                 }
+                return false;
             }
             return !SettingsHelper.LatestVersion.removeVanillaSettings;
         }

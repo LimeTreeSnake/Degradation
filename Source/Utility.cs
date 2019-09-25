@@ -39,6 +39,12 @@ namespace Degradation {
             }
             return input;
         }
+        /// <summary>
+        /// Check wether the item should degrade.
+        /// </summary>
+        /// <param name="item">The item in question</param>
+        /// <param name="chance">The chance that the item degrades.</param>
+        /// <returns></returns>
         public static int DegradeCheck(Thing item, float chance) {
             if (item.MaxHitPoints <= 1 || item.HitPoints <= 0 || item.def.useHitPoints == false || chance == 0) {
                 return 0;
@@ -49,24 +55,28 @@ namespace Degradation {
             }
             return GenMath.RoundRandom(x >= 100f ? 100f : x);
         }
+        /// <summary>
+        /// Degrades an item
+        /// </summary>
+        /// <param name="item">The item in question</param>
+        /// <param name="pawn">The pawn with the item</param>
+        /// <param name="damageIncrease">Extra damage</param>
+        /// <param name="random">If damage should be randomized</param>
         public static void Degrade(Thing item, Pawn pawn, float damageIncrease, bool random) {
-            float damage = random && damageIncrease != 1
+            float damage = random && damageIncrease >= 1 
                 ? Rand.Range(1, damageIncrease)
                 : damageIncrease;
-            if (damage > item.HitPoints) {
-                if (PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
-                    string str = "MessageWornAppareldegradedAway".Translate(GenLabel.ThingLabel(item.def, item.Stuff), pawn);
-                    str = str.CapitalizeFirst();
-                    Messages.Message(str, pawn, MessageTypeDefOf.NegativeEvent);
-                }
-                item.Destroy();
-            }
-            else {
+            if (damage > 0) {
                 item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
+            }
+            if(item.Destroyed && PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
+                string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(item.def, item.Stuff), pawn);
+                str = str.CapitalizeFirst();
+                Messages.Message(str, pawn, MessageTypeDefOf.NegativeEvent);
             }
         }
         public static bool JamCheck(Thing item, float maxPercentage) {
-            float percentage = ((float)maxPercentage / 100f) * (1f - (float)item.HitPoints / (float)item.MaxHitPoints);
+            float percentage = (maxPercentage / 100f) * ((1f - item.HitPoints) / item.MaxHitPoints);
             return DegradeCheck(item, percentage) > 0;
         }
         public static void Fire<T>(T __instance, float degradationRate, float damageIncrease, bool useRandom, bool __result = true, bool useAlternateFormula = false) where T : Verb {
@@ -84,10 +94,9 @@ namespace Degradation {
                     if (useAlternateFormula) {
                         int x = Traverse.Create(__instance).Property("ShotsPerBurst").GetValue<int>();
                         num = degradationRate * (1f + (SettingsHelper.LatestVersion.bulletMattersDamage * (float)x) / 100f);
-                        //Log.Message("BulletMatters: " + num + " from " + x + " bullets and a base rate of " + degradationRate );
                     }
-                    if (Utility.DegradeCheck(__instance.CasterPawn.equipment.Primary, num / 100f) > 0) {
-                        Utility.Degrade(__instance.CasterPawn.equipment.Primary, __instance.CasterPawn, damageIncrease, useRandom);
+                    if (DegradeCheck(__instance.CasterPawn.equipment.Primary, num / 100f) > 0) {
+                        Degrade(__instance.CasterPawn.equipment.Primary, __instance.CasterPawn, damageIncrease, useRandom);
                     }
                 }
             }

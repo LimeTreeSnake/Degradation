@@ -7,3 +7,5 @@
 -Made use of better verb to improve performance.
 -Made it work better with my new mod incoming soon.
 
+2019-09-25
+-Remade degradation code to avoid race issue
