@@ -69,7 +69,8 @@ namespace Degradation {
             if (damage > 0) {
                 item.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, damage));
             }
-            if(item.Destroyed && PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
+            if(item != null && item.Destroyed && PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead) {
+                pawn.jobs.ClearQueuedJobs();
                 string str = "MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(item.def, item.Stuff), pawn);
                 str = str.CapitalizeFirst();
                 Messages.Message(str, pawn, MessageTypeDefOf.NegativeEvent);
