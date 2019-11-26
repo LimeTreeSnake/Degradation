@@ -1,3 +1,10 @@
+2019-11-26
+- The used weapon should be damaged correctly in case of multiple possible sources.
+- Bullet Matters formula revised to actually do what it is supposed to. . .
+- Jamming works again.
+- Remade old firing code and fast exits.
+- Much sturdier weapon, undamaged weapons won't take any damage even at 100%.
+
 2019-10-18
 -Remade Damage Check
 -New Preview Image

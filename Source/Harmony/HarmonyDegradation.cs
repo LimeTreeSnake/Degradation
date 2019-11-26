@@ -1,7 +1,7 @@
 ﻿using Harmony;
 using RimWorld;
-using Verse;
 using System.Collections.Generic;
+using Verse;
 using Verse.Sound;
 
 namespace Degradation {
@@ -15,11 +15,10 @@ namespace Degradation {
         }
 
         public static bool ApparelTrackerTickRare_PreFix(Pawn_ApparelTracker __instance) {
-            //Log.Message(__instance.pawn + " Detoriates ");
-            if (!__instance.pawn.IsColonist && SettingsHelper.LatestVersion.npcdegrade) {
-                return !SettingsHelper.LatestVersion.removeVanillaSettings;
-            }
-            else if (__instance.pawn.Spawned) {
+            if (__instance.pawn.Spawned) {
+                if (!__instance.pawn.IsColonist && SettingsHelper.LatestVersion.npcdegrade) {
+                    return !SettingsHelper.LatestVersion.removeVanillaSettings;
+                }
                 int ticksGame = Find.TickManager.TicksGame;
                 int wearoutTick = Traverse.Create(__instance).Field("lastApparelWearoutTick").GetValue<int>();
                 if (wearoutTick < 0) {
@@ -66,56 +65,27 @@ namespace Degradation {
                     return;
                 }
             }
-            if (Utility.Eligable(__instance) && SettingsHelper.LatestVersion.degradeMelee) {
-                Utility.Fire(__instance,
-                        SettingsHelper.LatestVersion.degradationMeleeUsedRate,
-                        SettingsHelper.LatestVersion.damageIncreaseMeleeWeapon,
-                        SettingsHelper.LatestVersion.damageIncreaseRandomMeleeWeapon,
-                        __result
-                        );
+            if (SettingsHelper.LatestVersion.degradeMelee && Utility.Eligable(__instance)) {
+                Utility.Fire(__instance);
             }
         }
 
-        [HarmonyPriority(Priority.First)]
-        public static bool WarmupComplete_Ranged_PreFix(Verb_LaunchProjectile __instance, ref bool __state) {
+        [HarmonyPriority(150)]
+        public static bool WarmupComplete_Ranged_PreFix(Verb __instance, ref bool __state) {
             __state = false;
-            if (Utility.Eligable(__instance) && SettingsHelper.LatestVersion.jammingMatters) {
-                __state = Utility.JamCheck(__instance.CasterPawn.equipment.Primary, SettingsHelper.LatestVersion.jammingMattersPercentage);
-                if (__state) {
-                    if (__instance.CasterPawn.equipment.Primary.def.soundInteract != null) {
-                        __instance.CasterPawn.equipment.Primary.def.soundInteract.PlayOneShot(new TargetInfo(__instance.CasterPawn.Position, __instance.CasterPawn.Map));
-                    }
-                    if (SettingsHelper.LatestVersion.jammingMattersBreakable) {
-                        if (__instance.CasterPawn.IsColonistPlayerControlled || SettingsHelper.LatestVersion.npcdegrade) {
-                            Utility.Fire(__instance,
-                            SettingsHelper.LatestVersion.degradationRangedUsedRate,
-                            SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
-                            SettingsHelper.LatestVersion.damageIncreaseRandomRangedWeapon
-                            );
-                        }
-                    }
-                    return false;
-                }
+            if (Utility.Eligable(__instance) && !__instance.IsMeleeAttack && SettingsHelper.LatestVersion.jammingMatters) {
+                __state = Utility.JamCheck(__instance.EquipmentSource, __instance.CasterPawn, SettingsHelper.LatestVersion.jammingMattersPercentage);
             }
-            return true;
+            return !__state;
         }
         public static void WarmupComplete_Ranged_PostFix(Verb __instance, bool __state) {
-            if (!Utility.Eligable(__instance) || __instance.IsMeleeAttack || __state) {
-                return;
-            }
             if (!SettingsHelper.LatestVersion.npcdegrade) {
                 if (!__instance.CasterPawn.IsColonistPlayerControlled) {
                     return;
                 }
             }
-            if (SettingsHelper.LatestVersion.degradeRanged) {
-                Utility.Fire(__instance,
-                    SettingsHelper.LatestVersion.degradationRangedUsedRate,
-                    SettingsHelper.LatestVersion.damageIncreaseRangedWeapon,
-                    SettingsHelper.LatestVersion.damageIncreaseRandomRangedWeapon,
-                    true,
-                    SettingsHelper.LatestVersion.bulletMatters
-                    );
+            if (SettingsHelper.LatestVersion.degradeRanged && Utility.Eligable(__instance) && !__instance.IsMeleeAttack || !__state) {
+                Utility.Fire(__instance);
             }
         }
         public static void DailyDegrade<T>(List<T> items, Pawn pawn, float degradeRate, float damageIncrease, bool useRandom) where T : Thing {

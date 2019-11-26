@@ -7,11 +7,7 @@
 	</supportedVersions>
 	
 	<description> 
-Do you want things to deteriorate with time and use?
-Vanilla Rimworld arbitrarily checks each day, each piece of apparel on each pawn, whether it should have it deteriorate by one point or not.
-However, this is not done for weapons and other carried items. This mod rectifies this amongst adding other features.
-
 -License-
-You may use this code as however you want. However, do notify me as I'd love to hear if people find use of my code! :)
+You may use this code as however you want. However, do let me know and give credits due if you do as I'd love to hear about what you've created with it! :)
 	</description>
 </ModMetaData>

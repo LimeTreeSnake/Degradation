@@ -1,44 +1,48 @@
 ﻿using Verse;
 using UnityEngine;
 
-namespace Degradation {
-    internal class DegradationSettings : ModSettings {
+namespace Degradation
+{
+    internal class DegradationSettings : ModSettings
+    {
 
         #region Fields
         private static readonly bool base_removeVanillaSettings = true;
         private static readonly bool base_npcdegrade = false;
+        private static readonly bool alertWeapon = true;
+        private static readonly float alertWeaponValue = 25f;
 
         private static readonly bool base_qualityMatters = false;
         private static readonly float base_awful = 3f;
         private static readonly float base_poor = 2f;
         private static readonly float base_normal = 1f;
-        private static readonly float base_good = 0.9f;
-        private static readonly float base_excellent = 0.7f;
-        private static readonly float base_masterwork = 0.5f;
-        private static readonly float base_legendary = 0.3f;
+        private static readonly float base_good = 0.8f;
+        private static readonly float base_excellent = 0.6f;
+        private static readonly float base_masterwork = 0.4f;
+        private static readonly float base_legendary = 0.2f;
 
         private static readonly bool base_degradeApparell = true;
-        private static readonly float base_degradationApparellRate = 25f;
+        private static readonly float base_degradationApparellRate = 10f;
         private static readonly float base_damageIncreaseApparell = 1;
         private static readonly bool base_damageIncreaseRandomApparell = false;
 
         private static readonly bool base_degradeEquipment = true;
-        private static readonly float base_degradationEquipmentRate = 25f;
+        private static readonly float base_degradationEquipmentRate = 10f;
         private static readonly float base_damageIncreaseEquipment = 1;
         private static readonly bool base_damageIncreaseRandomEquipment = false;
 
         private static readonly bool base_degradeInventory = true;
-        private static readonly float base_degradationInventoryRate = 25f;
+        private static readonly float base_degradationInventoryRate = 10f;
         private static readonly float base_damageIncreaseItem = 1;
         private static readonly bool base_damageIncreaseRandomItem = false;
 
         private static readonly bool base_degradeMelee = true;
-        private static readonly float base_degradationMeleeUsedRate = 15f;
+        private static readonly float base_degradationMeleeUsedRate = 5f;
         private static readonly float base_damageIncreaseMeleeWeapon = 1;
         private static readonly bool base_damageIncreaseRandomMeleeWeapon = false;
 
         private static readonly bool base_degradeRanged = true;
-        private static readonly float base_degradationRangedUsedRate = 5f;
+        private static readonly float base_degradationRangedUsedRate = 2.5f;
         private static readonly float base_damageIncreaseRangedWeapon = 1;
         private static readonly bool base_damageIncreaseRandomRangedWeapon = false;
         private static readonly bool base_bulletMatters = false;
@@ -47,7 +51,6 @@ namespace Degradation {
         private static readonly bool base_jammingMattersBreakable = false;
         private static readonly float base_jammingMatterPercentage = 33;
 
-
         private static readonly bool base_minigunExcemption = true;
 
         #endregion Fields
@@ -55,6 +58,11 @@ namespace Degradation {
         #region Properties
         public bool removeVanillaSettings = base_removeVanillaSettings;
         public bool npcdegrade = base_npcdegrade;
+
+
+        public bool AlertWeapon = alertWeapon;
+        public float AlertWeaponValue = alertWeaponValue;
+
 
         public bool qualityMatters = base_qualityMatters;
         public float awful = base_awful;
@@ -103,6 +111,10 @@ namespace Degradation {
             base.ExposeData();
             Scribe_Values.Look(ref removeVanillaSettings, "RemoveVanillaSettings", base_removeVanillaSettings);
             Scribe_Values.Look(ref npcdegrade, "NPCdegrade", base_npcdegrade);
+
+
+            Scribe_Values.Look(ref AlertWeapon, "AlertWeapon", alertWeapon);
+            Scribe_Values.Look(ref AlertWeaponValue, "AlertWeaponValue", alertWeaponValue);
 
             Scribe_Values.Look(ref qualityMatters, "QualityMatters", base_qualityMatters);
             Scribe_Values.Look(ref awful, "Awful", base_awful);
@@ -192,7 +204,8 @@ namespace Degradation {
         }
     }
 
-    internal static class SettingsHelper {
+    internal static class SettingsHelper
+    {
         public static DegradationSettings LatestVersion;
 
         public static void Reset() {
@@ -200,9 +213,10 @@ namespace Degradation {
         }
     }
 
-    public class ModMain : Mod {
+    public class Degradation : Mod
+    {
         private DegradationSettings degradationSettings;
-        public ModMain(ModContentPack content) : base(content) {
+        public Degradation(ModContentPack content) : base(content) {
             degradationSettings = GetSettings<DegradationSettings>();
             SettingsHelper.LatestVersion = degradationSettings;
         }
@@ -218,7 +232,7 @@ namespace Degradation {
             inRect.yMax -= 20;
             Listing_Standard list = new Listing_Standard();
             Rect rect = new Rect(inRect.x, inRect.y, inRect.width, inRect.height);
-            Rect rect2 = new Rect(0f, 0f, inRect.width - 16f, inRect.height * 2 + 450f);
+            Rect rect2 = new Rect(0f, 0f, inRect.width - 30f, inRect.height * 2 + 750f);
             Widgets.BeginScrollView(rect, ref scrollPosition, rect2, true);
             list.Begin(rect2);
             if (list.ButtonText("Default Settings")) {
@@ -259,6 +273,14 @@ namespace Degradation {
                 degradationSettings.legendary = degradationSettings.legendary > 100f ? 100f : degradationSettings.legendary < 0f ? 0f : degradationSettings.legendary;
 
                 list.Gap();
+            }
+            list.CheckboxLabeled("Weapon damaged alert", ref degradationSettings.AlertWeapon, string.Format("Whether an alert should show that your pawn's weapons are damaged."));
+            if (degradationSettings.AlertWeapon) {
+                list.Label(string.Format("Alert after reaching this percent"));
+                float.TryParse(list.TextEntryLabeled("Awful ", string.Format("{0:#0.00}", degradationSettings.AlertWeaponValue)), out degradationSettings.AlertWeaponValue);
+                degradationSettings.AlertWeaponValue = Mathf.Round(list.Slider(degradationSettings.AlertWeaponValue, 0f, 100f) * 100f) / 100f;
+                degradationSettings.AlertWeaponValue = degradationSettings.AlertWeaponValue > 100f ? 100f : degradationSettings.AlertWeaponValue < 0f ? 0f : degradationSettings.AlertWeaponValue;
+
             }
             list.GapLine();
             list.Gap();
@@ -326,25 +348,16 @@ namespace Degradation {
                 degradationSettings.damageIncreaseRangedWeapon = (int)list.Slider(degradationSettings.damageIncreaseRangedWeapon, 1f, 10f);
                 list.CheckboxLabeled("Randomize damage done to ranged weapons", ref degradationSettings.damageIncreaseRandomRangedWeapon,
                       string.Format("With this setting on, the damage done to the ranged weapon when firing will be randomized from 1 to {0}.", degradationSettings.damageIncreaseRangedWeapon));
-                list.CheckboxLabeled("Bullet Matters", ref degradationSettings.bulletMatters, string.Format("This mode increases the degradation chance for weapons that fire multiple bullets." +
-                    "\n\nExample: You have a minigun that fires 24 rounds. " +
-                    "Each round increases the chance for damage by {0}% to the weapon. " +
-                    "{0} * 24 = " + degradationSettings.bulletMattersDamage * 24 + "% increased chance for degradation. " +
-                    "\n\nThus firing 24 bullets in a row gives a " + degradationSettings.degradationRangedUsedRate * (1 + (SettingsHelper.LatestVersion.bulletMattersDamage * 24) / 100) + "% chance for degradation instead of {0} with this mode on. ",
-                        degradationSettings.bulletMattersDamage, degradationSettings.degradationRangedUsedRate));
+                list.CheckboxLabeled("Bullet Matters", ref degradationSettings.bulletMatters, 
+                    string.Format("This mode increases the degradation chance for weapons that fire multiple bullets."));
                 if (degradationSettings.bulletMatters) {
-                    float.TryParse(list.TextEntryLabeled("Bullet rate ", string.Format("{0:#0.00}", degradationSettings.bulletMattersDamage)), out degradationSettings.bulletMattersDamage);
+                    float.TryParse(list.TextEntryLabeled("Bullet damage increase percentual rate ", string.Format("{0:#0.00}", degradationSettings.bulletMattersDamage)), out degradationSettings.bulletMattersDamage);
                     degradationSettings.bulletMattersDamage = Mathf.Round(list.Slider(degradationSettings.bulletMattersDamage, 1f, 100f) * 100f) / 100f;
                     degradationSettings.bulletMattersDamage = degradationSettings.bulletMattersDamage > 100f ? 100f : degradationSettings.bulletMattersDamage < 0 ? 0f : degradationSettings.bulletMattersDamage;
                     list.Gap();
                 }
-                list.CheckboxLabeled("Jamming Matters", ref degradationSettings.jammingMatters, string.Format("This mode enables ranged weapon jamming depending on current durability. Do note that this option also opts npc's ranged weapons to jam at times regardless if 'NPC stuff degrades' option is enabled or not. However, this is not true for the 'Jamming damages' option." +
-                    "\n\nExample: You have a broken pistol at 75% durability. " +
-                    "Initial Calculation gives a 25% chance of jamming. " +
-                    "However, the value in this slider changes the maximum possible chance to {0}%. " +
-                    "This value is then accounted for with those 25%.\n\n" +
-                    "There's a " + (((float)degradationSettings.jammingMattersPercentage / 100f) * (1f - (75f / 100f))) * 100f + "% chance of jamming given this example.",
-                        degradationSettings.jammingMattersPercentage));
+                list.CheckboxLabeled("Jamming Matters", ref degradationSettings.jammingMatters, 
+                    string.Format("This mode enables ranged weapon jamming depending on current durability"));
                 if (degradationSettings.jammingMatters) {
                     float.TryParse(list.TextEntryLabeled("Jamming rate ", string.Format("{0:#0.00}", degradationSettings.jammingMattersPercentage)), out degradationSettings.jammingMattersPercentage);
                     degradationSettings.jammingMattersPercentage = Mathf.Round(list.Slider(degradationSettings.jammingMattersPercentage, 1f, 100f) * 100f) / 100f;
