@@ -14,12 +14,14 @@ namespace Degradation
                 for (int i = 0; i < maps.Count; i++) {
                     if (maps[i].IsPlayerHome) {
                         foreach (Pawn p in maps[i].mapPawns.FreeColonistsSpawned) {
-                            bool degrading = false;
                             foreach (Thing thing in p.equipment.AllEquipmentListForReading) {
+                                bool degrading = false;
                                 if (thing.HitPoints / thing.MaxHitPoints < SettingsHelper.LatestVersion.AlertWeaponValue / 100f)
                                     degrading = true;
-                                if (degrading)
+                                if (degrading) { 
                                     yield return p;
+                                    break;
+                                }
                             }
                         }
                     }

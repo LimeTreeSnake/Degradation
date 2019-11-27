@@ -276,8 +276,8 @@ namespace Degradation
             }
             list.CheckboxLabeled("Weapon damaged alert", ref degradationSettings.AlertWeapon, string.Format("Whether an alert should show that your pawn's weapons are damaged."));
             if (degradationSettings.AlertWeapon) {
-                list.Label(string.Format("Alert after reaching this percent"));
-                float.TryParse(list.TextEntryLabeled("Awful ", string.Format("{0:#0.00}", degradationSettings.AlertWeaponValue)), out degradationSettings.AlertWeaponValue);
+                list.Label(string.Format("Alert when reaching this degradation percent"));
+                float.TryParse(list.TextEntryLabeled("Alert ", string.Format("{0:#0.00}", degradationSettings.AlertWeaponValue)), out degradationSettings.AlertWeaponValue);
                 degradationSettings.AlertWeaponValue = Mathf.Round(list.Slider(degradationSettings.AlertWeaponValue, 0f, 100f) * 100f) / 100f;
                 degradationSettings.AlertWeaponValue = degradationSettings.AlertWeaponValue > 100f ? 100f : degradationSettings.AlertWeaponValue < 0f ? 0f : degradationSettings.AlertWeaponValue;
 

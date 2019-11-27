@@ -4,6 +4,7 @@
 - Jamming works again.
 - Remade old firing code and fast exits.
 - Much sturdier weapon, undamaged weapons won't take any damage even at 100%.
+- Degrading weapons should only show once per pawn.
 
 2019-10-18
 -Remade Damage Check
