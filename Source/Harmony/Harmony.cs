@@ -19,7 +19,7 @@ namespace Degradation.Harmony {
         }
 
         public static bool TryCastShot_PreFix(Verb __instance) {
-            if (__instance.EquipmentSource.def.IsRangedWeapon && !Settings.SettingsHelper.LatestVersion.Excluded.Contains(__instance.EquipmentSource.def.defName)) {
+            if (__instance.EquipmentSource != null && __instance.EquipmentSource.def.IsRangedWeapon && !Settings.SettingsHelper.LatestVersion.Excluded.Contains(__instance.EquipmentSource.def.defName)) {
                 if (Utility.Utility.JamCheck(__instance.EquipmentSource)) {
                     Utility.Utility.Degrade(__instance.EquipmentSource, __instance.CasterPawn);
                     return false;
@@ -28,7 +28,7 @@ namespace Degradation.Harmony {
             return true;
         }
         public static void TryCastShot_PostFix(Verb __instance) {
-            if (__instance.EquipmentSource.def.IsWeapon && !Settings.SettingsHelper.LatestVersion.Excluded.Contains(__instance.EquipmentSource.def.defName)) {
+            if (__instance.EquipmentSource != null && __instance.EquipmentSource.def.IsWeapon && !Settings.SettingsHelper.LatestVersion.Excluded.Contains(__instance.EquipmentSource.def.defName)) {
                 if (Utility.Utility.QualityCheck(__instance.EquipmentSource)) {
                     Utility.Utility.Degrade(__instance.EquipmentSource, __instance.CasterPawn);
                 }
