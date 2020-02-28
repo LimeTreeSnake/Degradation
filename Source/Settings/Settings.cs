@@ -8,30 +8,31 @@ using RimWorld;
 namespace Degradation.Settings {
     internal class Settings : ModSettings {
         #region Fields
-        private static readonly int awful = 20;
-        private static readonly int poor = 15;
-        private static readonly int normal = 10;
-        private static readonly int good = 8;
-        private static readonly int excellent = 6;
-        private static readonly int masterwork = 4;
-        private static readonly int legendary = 2;
-        private static readonly int alert = 25;
-        private static readonly IEnumerable<ThingDef> Weapons = DefDatabase<ThingDef>.AllDefsListForReading.Where(x => x.IsWeapon);
-        
+        private int awful = 20;
+        private int poor = 15;
+        private int normal = 10;
+        private int good = 8;
+        private int excellent = 6;
+        private int masterwork = 4;
+        private int legendary = 2;
+        private int alert = 25;
+        private bool jamming = false;
+        private IEnumerable<ThingDef> Weapons = DefDatabase<ThingDef>.AllDefsListForReading.Where(x => x.IsWeapon);
+        private Vector2 scrollPosition = Vector2.zero;
+        private string Filter = "";
+
         #endregion Fields
         #region Properties
-        public Vector2 scrollPosition = Vector2.zero;
-        public int Awful = awful;
-        public int Poor = poor;
-        public int Normal = normal;
-        public int Good = good;
-        public int Excellent = excellent;
-        public int Masterwork = masterwork;
-        public int Legendary = legendary;
-        public int Alert = alert;
-        public bool Jamming;
+        public int Awful => awful;
+        public int Poor => poor;
+        public int Normal => normal;
+        public int Good => good;
+        public int Excellent => excellent;
+        public int Masterwork => masterwork;
+        public int Legendary => legendary;
+        public int Alert => alert;
+        public bool Jamming => jamming;
         public HashSet<string> Excluded;
-        private string Filter = "";
         #endregion Properties
         #region Methods
         public Settings() {
@@ -39,15 +40,15 @@ namespace Degradation.Settings {
         }
         public override void ExposeData() {
             base.ExposeData();
-            Scribe_Values.Look(ref Awful, "Awful", awful);
-            Scribe_Values.Look(ref Poor, "Poor", poor);
-            Scribe_Values.Look(ref Normal, "Normal", normal);
-            Scribe_Values.Look(ref Good, "Good", good);
-            Scribe_Values.Look(ref Excellent, "Excellent", excellent);
-            Scribe_Values.Look(ref Masterwork, "Masterwork", masterwork);
-            Scribe_Values.Look(ref Legendary, "Legendary", legendary);
-            Scribe_Values.Look(ref Jamming, "Jamming");
-            Scribe_Values.Look(ref Alert, "Alert");
+            Scribe_Values.Look(ref awful, "Awful", awful);
+            Scribe_Values.Look(ref poor, "Poor", poor);
+            Scribe_Values.Look(ref normal, "Normal", normal);
+            Scribe_Values.Look(ref good, "Good", good);
+            Scribe_Values.Look(ref excellent, "Excellent", excellent);
+            Scribe_Values.Look(ref masterwork, "Masterwork", masterwork);
+            Scribe_Values.Look(ref legendary, "Legendary", legendary);
+            Scribe_Values.Look(ref jamming, "Jamming");
+            Scribe_Values.Look(ref alert, "Alert");
             Scribe_Collections.Look(ref Excluded, "Excluded");
         }
         public void DoWindowContents(Rect inRect) {
@@ -59,37 +60,37 @@ namespace Degradation.Settings {
                 Rect rect2 = new Rect(0f, 0f, inRect.width - 30f, inRect.height * 2 + 600);
                 Widgets.BeginScrollView(rect, ref scrollPosition, rect2, true);
                 list.Begin(rect2);
-                list.CheckboxLabeled(Language.Language.Jamming, ref Jamming);
+                list.CheckboxLabeled(Language.Language.Jamming, ref jamming);
                 list.Label(Language.Language.Alert + " - " + Alert + "%");
-                Alert = (byte)Mathf.Round(list.Slider(Alert, 0, 100));
+                alert = (byte)Mathf.Round(list.Slider(Alert, 0, 100));
                 list.GapLine(6);
                 list.Label(Language.Language.Degradation);
                 list.Label(Language.Language.Awful + " - " + Awful);
-                Awful = (byte)Mathf.Round(list.Slider(Awful, Poor, 100));
+                awful = (byte)Mathf.Round(list.Slider(Awful, Poor, 100));
                 list.Label(Language.Language.Poor + " - " + Poor);
                 if (Poor > Awful)
-                    Awful = Poor;
-                Poor = (byte)Mathf.Round(list.Slider(Poor, Normal, 100));
+                    awful = Poor;
+                poor = (byte)Mathf.Round(list.Slider(Poor, Normal, 100));
                 list.Label(Language.Language.Normal + " - " + Normal);
                 if (Normal > Poor)
-                    Poor = Normal;
-                Normal = (byte)Mathf.Round(list.Slider(Normal, Good, 100));
+                    poor = Normal;
+                normal = (byte)Mathf.Round(list.Slider(Normal, Good, 100));
                 list.Label(Language.Language.Good + " - " + Good);
                 if (Good > Normal)
-                    Normal = Good;
-                Good = (byte)Mathf.Round(list.Slider(Good, Excellent, 100));
+                    normal = Good;
+                good = (byte)Mathf.Round(list.Slider(Good, Excellent, 100));
                 list.Label(Language.Language.Excellent + " - " + Excellent);
                 if (Excellent > Good)
-                    Good = Excellent;
-                Excellent = (byte)Mathf.Round(list.Slider(Excellent, Masterwork, 100));
+                    good = Excellent;
+                excellent = (byte)Mathf.Round(list.Slider(Excellent, Masterwork, 100));
                 list.Label(Language.Language.Masterwork + " - " + Masterwork);
                 if (Masterwork > Excellent)
-                    Excellent = Masterwork;
-                Masterwork = (byte)Mathf.Round(list.Slider(Masterwork, Legendary, 100));
+                    excellent = Masterwork;
+                masterwork = (byte)Mathf.Round(list.Slider(Masterwork, Legendary, 100));
                 list.Label(Language.Language.Legendary + " - " + Legendary);
                 if (Legendary > Masterwork)
-                    Masterwork = Legendary;
-                Legendary = (byte)Mathf.Round(list.Slider(Legendary, 0, 100));
+                    masterwork = Legendary;
+                legendary = (byte)Mathf.Round(list.Slider(Legendary, 0, 100));
                 ///Excluding
                 list.GapLine(12);
                 list.Label(Language.Language.Exclude);
