@@ -12,7 +12,6 @@ namespace Degradation.Utility {
             return false;
         }
         public static bool QualityCheck(Thing thing) {
-            Log.Message(Rand.Value.ToString());
             if (thing.TryGetQuality(out QualityCategory qc))
                 switch (qc) {
                     case QualityCategory.Awful: {

@@ -18,6 +18,7 @@ namespace Degradation.Harmony {
                 new HarmonyMethod(typeof(Harmony).GetMethod("TryCastShot_PostFix")));
         }
 
+        [HarmonyPriority(150)]
         public static bool TryCastShot_PreFix(Verb __instance) {
             if (__instance.EquipmentSource != null && __instance.EquipmentSource.def.IsRangedWeapon && !Settings.SettingsHelper.LatestVersion.Excluded.Contains(__instance.EquipmentSource.def.defName)) {
                 if (Utility.Utility.JamCheck(__instance.EquipmentSource)) {
@@ -27,6 +28,7 @@ namespace Degradation.Harmony {
             }
             return true;
         }
+        [HarmonyPriority(150)]
         public static void TryCastShot_PostFix(Verb __instance) {
             if (__instance.EquipmentSource != null && __instance.EquipmentSource.def.IsWeapon && !Settings.SettingsHelper.LatestVersion.Excluded.Contains(__instance.EquipmentSource.def.defName)) {
                 if (Utility.Utility.QualityCheck(__instance.EquipmentSource)) {
