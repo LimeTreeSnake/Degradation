@@ -69,6 +69,16 @@ namespace Degradation.Utility {
                 Messages.Message(GenText.CapitalizeFirst("MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(thing.def, thing.Stuff), pawn)), pawn, MessageTypeDefOf.NegativeEvent);
             }
         }
+        public static void DegradeTool(Thing item, Pawn pawn)
+        {
+            // I guess this is no longer needed?
+
+            /*if (!Settings.SettingsHelper.LatestVersion.npcdegrade)
+                if (pawn.IsColonistPlayerControlled)
+                    return;*/
+            if (QualityCheck(item))
+                Degrade(item, pawn);
+        }
         public static List<Pawn> WornoutWeapons {
             get {
                 pawnWithWornoutWeapons.Clear();
